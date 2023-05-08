@@ -1,4 +1,7 @@
-﻿using DatabaseMigrationSystem.UseCases.Settings.Commands;
+﻿using DatabaseMigrationSystem.Common.Dto;
+using DatabaseMigrationSystem.UseCases.Migration.Commands;
+using DatabaseMigrationSystem.UseCases.Migration.Queries;
+using DatabaseMigrationSystem.UseCases.Settings.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,9 +28,9 @@ public class MigrationController : ControllerBase
     /// <response code = "200" > Успешное выполнение.</response>
     /// <response code = "500" > Непредвиденная ошибка сервера.</response>
     [HttpPost]
-    public async Task SetSettings(SetSettingsCommand command, CancellationToken cancellationToken)
+    public async Task<TableInfosDto> GetTables(GetSourceTablesQuery query, CancellationToken cancellationToken)
     {
-        await _mediator.Send(command, cancellationToken);
+        return await _mediator.Send(query, cancellationToken);
     }
     
     /// <summary>
@@ -36,7 +39,7 @@ public class MigrationController : ControllerBase
     /// <response code = "200" > Успешное выполнение.</response>
     /// <response code = "500" > Непредвиденная ошибка сервера.</response>
     [HttpPost]
-    public async Task SetSettings1(SetSettingsCommand command, CancellationToken cancellationToken)
+    public async Task MigrateTables(MigrateTableCommand command, CancellationToken cancellationToken)
     {
         await _mediator.Send(command, cancellationToken);
     }
@@ -47,7 +50,7 @@ public class MigrationController : ControllerBase
     /// <response code = "200" > Успешное выполнение.</response>
     /// <response code = "500" > Непредвиденная ошибка сервера.</response>
     [HttpPost]
-    public async Task SetSettings2(SetSettingsCommand command, CancellationToken cancellationToken)
+    public async Task MigrateTable(SetSettingsCommand command, CancellationToken cancellationToken)
     {
         await _mediator.Send(command, cancellationToken);
     }

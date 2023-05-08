@@ -1,5 +1,7 @@
-﻿using DatabaseMigrationSystem.DataAccess.Implementations.Settings;
+﻿using DatabaseMigrationSystem.DataAccess.Implementations.Migration;
+using DatabaseMigrationSystem.DataAccess.Implementations.Settings;
 using DatabaseMigrationSystem.DataAccess.Implementations.User;
+using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Settings;
 using DatabaseMigrationSystem.DataAccess.Interfaces.User;
 using DatabaseMigrationSystem.Utils.Modules;
@@ -32,5 +34,8 @@ public class DataAccessModule : ApplicationModule
         services.AddScoped<IUpdateSettingsRepository, UpdateSettingsRepository>();
         #endregion
 
+        services.AddScoped<IGetTableInfoRepositoryFactory, GetTableInfoRepositoryFactory>();
+        services.AddScoped<IReadDataRepositoryFactory, ReadDataRepositoryFactory>();
+        services.AddScoped<IWriteDataRepositoryFactory, WriteDataRepositoryFactory>();
     }
 }

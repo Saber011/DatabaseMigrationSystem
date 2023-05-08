@@ -7,10 +7,6 @@
 
     <ItemGroup>
       <Folder Include="Account\Queries" />
-      <Folder Include="Migration\Commands" />
-      <Folder Include="Migration\Handlers" />
-      <Folder Include="Migration\Mappings" />
-      <Folder Include="Migration\Queries" />
       <Folder Include="Migration\Validators" />
       <Folder Include="Settings\Queries" />
       <Folder Include="Settings\Validators" />

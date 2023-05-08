@@ -11,9 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Implementations\Migration\MySQl" />
-      <Folder Include="Implementations\Migration\Oracle" />
-      <Folder Include="Implementations\Migration\SqlServer" />
+      <PackageReference Include="Dapper" Version="2.0.123" />
+      <PackageReference Include="PostgreSQLCopyHelper" Version="2.8.0" />
     </ItemGroup>
 
 </Project>

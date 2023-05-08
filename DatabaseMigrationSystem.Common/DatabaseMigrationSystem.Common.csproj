@@ -9,8 +9,4 @@
       <PackageReference Include="MediatR.Contracts" Version="1.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Dto\Request" />
-    </ItemGroup>
-
 </Project>

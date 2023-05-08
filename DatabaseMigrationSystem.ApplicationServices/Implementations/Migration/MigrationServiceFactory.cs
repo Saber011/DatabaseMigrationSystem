@@ -1,4 +1,6 @@
-﻿using DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration;
+﻿using DatabaseMigrationSystem.ApplicationServices.Implementations.Migration.PostgresSql;
+using DatabaseMigrationSystem.ApplicationServices.Implementations.Migration.SqlServer;
+using DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration;
 using DatabaseMigrationSystem.Common.Enums;
 
 namespace DatabaseMigrationSystem.ApplicationServices.Implementations.Migration;

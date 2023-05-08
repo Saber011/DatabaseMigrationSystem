@@ -1,6 +1,6 @@
 ﻿using DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration;
 
-namespace DatabaseMigrationSystem.ApplicationServices.Implementations.Migration;
+namespace DatabaseMigrationSystem.ApplicationServices.Implementations.Migration.SqlServer;
 
 public class SqlServerMigrationService : IMigrationService
 {
