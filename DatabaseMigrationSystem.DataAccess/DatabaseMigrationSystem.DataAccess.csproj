@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DatabaseMigrationSystem.Infrastructure\DatabaseMigrationSystem.Infrastructure.csproj" />
+      <ProjectReference Include="..\DatabaseMigrationSystem.Utils\DatabaseMigrationSystem.Utils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Implementations\Migration\MySQl" />
+      <Folder Include="Implementations\Migration\Oracle" />
+      <Folder Include="Implementations\Migration\SqlServer" />
+    </ItemGroup>
+
+</Project>

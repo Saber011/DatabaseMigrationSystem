@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Account\Queries" />
+      <Folder Include="Migration\Commands" />
+      <Folder Include="Migration\Handlers" />
+      <Folder Include="Migration\Mappings" />
+      <Folder Include="Migration\Queries" />
+      <Folder Include="Migration\Validators" />
+      <Folder Include="Settings\Queries" />
+      <Folder Include="Settings\Validators" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DatabaseMigrationSystem.ApplicationServices\DatabaseMigrationSystem.ApplicationServices.csproj" />
+      <ProjectReference Include="..\DatabaseMigrationSystem.DataAccess\DatabaseMigrationSystem.DataAccess.csproj" />
+      <ProjectReference Include="..\DatabaseMigrationSystem.Utils\DatabaseMigrationSystem.Utils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.0" />
+        <PackageReference Include="FluentValidation" Version="11.5.2" />
+        <PackageReference Include="MediatR" Version="10.0.1" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.10.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="FluentValidation.DependencyInjectionExtensions">
+        <HintPath>C:\Users\Yurii\.nuget\packages\fluentvalidation.dependencyinjectionextensions\11.5.1\lib\netstandard2.1\FluentValidation.DependencyInjectionExtensions.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

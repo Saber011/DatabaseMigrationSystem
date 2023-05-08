@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>DatabaseMigrationSystem</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.8" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="MediatR" Version="10.0.1" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DatabaseMigrationSystem.ApplicationServices\DatabaseMigrationSystem.ApplicationServices.csproj" />
+      <ProjectReference Include="..\DatabaseMigrationSystem.Common\DatabaseMigrationSystem.Common.csproj" />
+      <ProjectReference Include="..\DatabaseMigrationSystem.DataAccess\DatabaseMigrationSystem.DataAccess.csproj" />
+      <ProjectReference Include="..\DatabaseMigrationSystem.Infrastructure\DatabaseMigrationSystem.Infrastructure.csproj" />
+      <ProjectReference Include="..\DatabaseMigrationSystem.UseCases\DatabaseMigrationSystem.UseCases.csproj" />
+      <ProjectReference Include="..\DatabaseMigrationSystem.Utils\DatabaseMigrationSystem.Utils.csproj" />
+    </ItemGroup>
+
+</Project>
