@@ -2,7 +2,6 @@
 using DatabaseMigrationSystem.ApplicationServices.Implementations.Migration;
 using DatabaseMigrationSystem.ApplicationServices.Interfaces.Account;
 using DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration;
-using DatabaseMigrationSystem.DataAccess.Implementations.Migration;
 using DatabaseMigrationSystem.Utils.Modules;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +16,6 @@ public class ApplicationServicesModule: ApplicationModule
         
         services.AddScoped<IGetCurrentUserInfoService, GetCurrentUserInfoService>();
         
-        services.AddScoped<IMigrationServiceFactory, MigrationServiceFactory>();
         services.AddScoped<IDataMigratorService, DataMigratorService>();
     }
 }

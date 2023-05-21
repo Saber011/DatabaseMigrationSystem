@@ -22,4 +22,11 @@
         <PackageReference Include="Microsoft.Extensions.Features" Version="6.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Implementations\Migration\MySQl" />
+      <Folder Include="Implementations\Migration\Oracle" />
+      <Folder Include="Implementations\Migration\PostgresSql" />
+      <Folder Include="Implementations\Migration\SqlServer" />
+    </ItemGroup>
+
 </Project>

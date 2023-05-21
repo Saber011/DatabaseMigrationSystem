@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration;
 using DatabaseMigrationSystem.Common.Dto.Request;
-using DatabaseMigrationSystem.Common.Enums;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
 using DatabaseMigrationSystem.Utils;
 
@@ -27,24 +26,20 @@ public class DataMigratorService : IDataMigratorService
         
          await readRepository.ReadDataAsync( request.SourceSchema,  request.SourceTable, dataQueue);
          await writeRepository.WriteDataAsync(request.DestinationSchema, request.DestinationTable, dataQueue);
-        // var readTask = Task.Run(() => readRepository.ReadDataAsync( request.SourceSchema,  request.SourceTable, dataQueue), cancellationToken);
-        // var writeTask = Task.Run(() =>
-        // {
-        //     return writeRepository.WriteDataAsync(request.DestinationSchema, request.DestinationTable, dataQueue);
-        //     // RetryHelper.Do(
-        //     //     () =>
-        //     //     {
-        //     //         return writeRepository.WriteDataAsync(request.DestinationSchema, request.DestinationTable, dataQueue);
-        //     //     },
-        //     //     (ex, iteration) =>
-        //     //     {
-        //     //         
-        //     //     },
-        //     //     2, TimeSpan.FromMilliseconds(10), 2);
-        //     
-        // }, cancellationToken);
+         var readTask = Task.Run(() => readRepository.ReadDataAsync( request.SourceSchema,  request.SourceTable, dataQueue), cancellationToken);
+         var writeTask = Task.Run(() =>
+         {
+             RetryHelper.Do(
+                 () => writeRepository.WriteDataAsync(request.DestinationSchema, request.DestinationTable, dataQueue),
+                 (ex, iteration) =>
+                 {
+                     
+                 },
+                 2, TimeSpan.FromMilliseconds(10), 2);
+             
+         }, cancellationToken);
         
-        //await Task.WhenAll(readTask, writeTask);
+        await Task.WhenAll(readTask, writeTask);
         return true;
     }
 }
