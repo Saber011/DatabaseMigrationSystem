@@ -12,6 +12,9 @@ public class SettingsConfiguration : IEntityTypeConfiguration<Settings>
         
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Id)
+            .HasColumnName("id");
+        
         builder.Property(x => x.DestinationConnectionString)
             .HasColumnName("destination_connection_string")
             .HasComment("Строка подключения к базе данных");

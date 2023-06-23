@@ -1,6 +1,7 @@
 using System.Text;
 using DatabaseMigrationSystem.ApplicationServices;
 using DatabaseMigrationSystem.DataAccess;
+using DatabaseMigrationSystem.Exceptions;
 using DatabaseMigrationSystem.Infrastructure;
 using DatabaseMigrationSystem.Infrastructure.Configurations;
 using DatabaseMigrationSystem.Infrastructure.DbContext;
@@ -19,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -66,6 +67,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddSwagger();
+builder.Services.AddTransient<ExceptionsMiddleware>();
 
 var app = builder.Build();
 
@@ -77,11 +79,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionsMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseProjectSwagger();
 app.MapControllers();
+
 
 app.Run();
 

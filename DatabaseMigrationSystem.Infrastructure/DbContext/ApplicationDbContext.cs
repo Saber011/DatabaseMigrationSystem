@@ -11,6 +11,8 @@ public class ApplicationDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<UserToken> UserTokens { get; set; }
     
     public DbSet<Settings> Settings { get; set; }
+    
+    public DbSet<MigrationLog> MigrationLog { get; set; }
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {

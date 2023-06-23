@@ -37,6 +37,17 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, A
             
         var refreshToken = userToken.Single(x => x.Token == request.Token);
 
+        if (refreshToken.Expires - DateTime.Now > TimeSpan.FromMinutes(5))
+        {
+            return new AuthenticateInfo
+            {
+                Login = user.Login,
+                Id = user.Id,
+                JwtToken = request.AccessToken,
+                RefreshToken = refreshToken.Token,
+            };
+        }
+
         var jwtToken = await _generateJwtTokenService.Handle(user.Id, cancellationToken);
         var newRefreshToken = await _generateRefreshTokenService.Handle(request.IpAddess, cancellationToken);
         refreshToken.Revoked = DateTime.UtcNow;

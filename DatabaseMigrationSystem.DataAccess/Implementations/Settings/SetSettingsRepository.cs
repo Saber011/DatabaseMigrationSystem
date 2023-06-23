@@ -1,5 +1,6 @@
 ﻿using DatabaseMigrationSystem.DataAccess.Interfaces.Settings;
 using DatabaseMigrationSystem.Infrastructure.DbContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseMigrationSystem.DataAccess.Implementations.Settings;
 
@@ -16,7 +17,17 @@ public class SetSettingsRepository: ISetSettingsRepository
     {
         await using var context = _contextFactory();
 
-        await context.Settings.AddAsync(request, cancellationToken);
+        var existingRecord = await context.Settings.FirstOrDefaultAsync(x => x.UserId == request.UserId, cancellationToken);
+    
+        if (existingRecord != null)
+        {
+            request.Id = existingRecord.Id;
+            context.Entry(existingRecord).CurrentValues.SetValues(request);
+        }
+        else
+        {
+            await context.Settings.AddAsync(request, cancellationToken);
+        }
 
         await context.SaveChangesAsync(cancellationToken);
     }

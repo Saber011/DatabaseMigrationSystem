@@ -13,6 +13,6 @@ public class AuthenticateCommandValidator: AbstractValidator<AuthenticateCommand
         
         RuleFor(x => x.Password)
             .NotEmpty()
-            .MinimumLength(6);
+            .MinimumLength(4);
     }
 }

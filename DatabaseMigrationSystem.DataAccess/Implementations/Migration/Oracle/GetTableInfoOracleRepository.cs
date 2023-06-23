@@ -20,25 +20,28 @@ public class GetTableInfoOracleRepository: IGetTableInfoRepository
         
         const string query = @"
             SELECT DISTINCT
-                u.table_name AS TableName,
-                u.owner AS Schema,
-                CASE
-                    WHEN uc.constraint_type = 'P' THEN 1
-                    ELSE 0
-                END AS HasParent,
-                (
-                    SELECT uc2.table_name
-                    FROM all_constraints uc2
-                    WHERE uc2.constraint_name = uc.r_constraint_name AND uc2.owner = uc.r_owner
-                ) AS ParentTableName
-            FROM
-                all_constraints uc
-                JOIN all_cons_columns ucc ON uc.constraint_name = ucc.constraint_name AND uc.owner = ucc.owner
-                JOIN all_tab_columns u ON ucc.owner = u.owner AND ucc.table_name = u.table_name AND ucc.column_name = u.column_name
-            WHERE
-                u.owner NOT IN ('SYS', 'SYSTEM')
-                AND uc.constraint_type IN ('P', 'R')
-        ";
+            ut.table_name AS TableName,
+            ut.owner AS Schema,
+            ut.num_rows AS RowCount,
+            CASE
+                WHEN uc.constraint_type = 'P' THEN 1
+                ELSE 0
+            END AS HasParent,
+            (
+                SELECT uc2.table_name
+                FROM all_constraints uc2
+                WHERE uc2.constraint_name = uc.r_constraint_name AND uc2.owner = uc.r_owner
+            ) AS ParentTableName
+        FROM
+            user_tables ut
+            LEFT JOIN all_constraints uc
+            ON ut.table_name = uc.table_name AND ut.owner = uc.owner
+            LEFT JOIN all_cons_columns ucc 
+            ON uc.constraint_name = ucc.constraint_name AND uc.owner = ucc.owner
+        WHERE
+            ut.owner NOT IN ('SYS', 'SYSTEM')
+            AND (uc.constraint_type IN ('P', 'R') OR uc.constraint_type IS NULL)
+    ";
 
         var tableInfos = new Dictionary<string, TableInfo>();
 
@@ -49,13 +52,14 @@ public class GetTableInfoOracleRepository: IGetTableInfoRepository
             var tableName = result.TableName;
             var schema = result.Schema;
             var hasParent = result.HasParent;
+            var rowCount = result.RowCount;
             var parentTableName = result.ParentTableName;
 
             var tableFullName = $"{schema}.{tableName}";
 
             if (!tableInfos.ContainsKey(tableFullName))
             {
-                tableInfos[tableFullName] = new TableInfo { TableName = tableName, Schema = schema };
+                tableInfos[tableFullName] = new TableInfo { TableName = tableName, Schema = schema, RowCount = rowCount };
             }
 
             var tableInfo = tableInfos[tableFullName];

@@ -7,4 +7,6 @@ public sealed class TableInfo
     public bool HasParent { get; set; }
     public string ParentTableName { get; set; }
     public List<string> ChildTables { get; set; } = new List<string>();
+    
+    public int RowCount { get; set; }
 }

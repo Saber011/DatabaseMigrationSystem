@@ -14,4 +14,9 @@ public sealed class TableInfoDto
     /// 
     /// </summary>
     public string Schema { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public int DataCount { get; set; }
 }

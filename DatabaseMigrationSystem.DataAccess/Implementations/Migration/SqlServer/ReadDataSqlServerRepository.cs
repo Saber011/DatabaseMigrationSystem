@@ -25,7 +25,7 @@ public class ReadDataSqlServerRepository : ReadDataRepository
             {
                 var data = await connection.QueryAsync<dynamic>($@"
                     SELECT *
-                    FROM {schema}.{table}
+                    FROM [{schema}].[{table}]
                     ORDER BY (SELECT NULL)
                     OFFSET {offset} ROWS
                     FETCH NEXT {BatchSize} ROWS ONLY");

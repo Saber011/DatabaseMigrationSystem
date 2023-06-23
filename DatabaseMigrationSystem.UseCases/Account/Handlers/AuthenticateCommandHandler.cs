@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Action.Platform.Common.Exceptions;
 using AutoMapper;
 using DatabaseMigrationSystem.ApplicationServices.Interfaces.Account;
 using DatabaseMigrationSystem.Common.Dto;
@@ -32,12 +33,17 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
     public async Task<AuthenticateInfo> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
     {
         var user = await _getByLoginRepository.Get(request.Login, cancellationToken);
-        var roles = await _getUserRolesRepository.Get(user.Id, cancellationToken);
+
+        if (user is null)
+        {
+            throw new BrokenRulesException("Логин или пароль не верны", 1);
+        }
+        
         var hasher = new PasswordHasher<AuthenticateCommand>();
 
         if (hasher.VerifyHashedPassword(_mapper.Map<AuthenticateCommand>(user), user.Password, request.Password) == PasswordVerificationResult.Failed)
         {
-            throw new  ValidationException( "Логин или пароль не верны");
+            throw new BrokenRulesException("Логин или пароль не верны", 1);
         }
         var jwtToken = await _generateJwtTokenService.Handle(user.Id, cancellationToken);
         var refreshToken = await _generateRefreshTokenService.Handle(request.IpAddress, cancellationToken);

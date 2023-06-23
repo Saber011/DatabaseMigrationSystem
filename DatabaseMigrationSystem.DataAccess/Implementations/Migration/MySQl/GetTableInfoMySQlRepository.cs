@@ -20,11 +20,11 @@ public class GetTableInfoMySQlRepository: IGetTableInfoRepository
         var tableInfos = new List<TableInfo>();
 
         var tablesQuery = @"
-                SELECT TABLE_SCHEMA, TABLE_NAME
+                SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS
                 FROM information_schema.tables
                 WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = DATABASE();
             ";
-        var tables = await connection.QueryAsync<(string TableSchema, string TableName)>(tablesQuery);
+        var tables = await connection.QueryAsync<(string TableSchema, string TableName, int TableRows)>(tablesQuery);
 
 
         var foreignKeysQuery = @"
@@ -45,7 +45,8 @@ public class GetTableInfoMySQlRepository: IGetTableInfoRepository
             var tableInfo = new TableInfo
             {
                 TableName = table.TableName,
-                Schema = table.TableSchema
+                Schema = table.TableSchema,
+                RowCount = table.TableRows
             };
 
             // Check if the table has a parent table

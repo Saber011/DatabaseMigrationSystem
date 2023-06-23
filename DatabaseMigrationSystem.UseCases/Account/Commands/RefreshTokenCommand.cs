@@ -20,4 +20,10 @@ public class RefreshTokenCommand : IRequest<AuthenticateInfo>
     /// </summary>
     [JsonIgnore]
     public string IpAddess { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [JsonIgnore]
+    public string AccessToken { get; set; }
 }

@@ -23,7 +23,9 @@ public class WriteDataPostgresSqlRepository : IWriteDataRepository
         var columns = await GetColumnsInfo(connection, schema, table);
 
         // Создаем экземпляр NpgsqlCopyIn
-        await using var writer = await connection.BeginBinaryImportAsync($"COPY {schema}.{table} ({string.Join(",", columns.Select(c => c.ColumnName))}) FROM STDIN (FORMAT BINARY)");
+        var copyCommand =
+            $"COPY {schema}.{table} ({string.Join(",", columns.Select(c => $"\"{c.ColumnName}\""))}) FROM STDIN (FORMAT BINARY)";
+        await using var writer = await connection.BeginBinaryImportAsync(copyCommand);
 
         // В цикле обходим все партии данных из очереди
         foreach (var dataBatch in dataQueue.GetConsumingEnumerable())
@@ -31,11 +33,10 @@ public class WriteDataPostgresSqlRepository : IWriteDataRepository
             // Конвертируем каждую строку данных из списка в массив байтов
             foreach (var dataRow in (dataBatch.Select(x => (IDictionary<string, object>)x)))
             {
-                var rowValues = columns.Select(column => dataRow[char.ToUpperInvariant(column.ColumnName[0]) + column.ColumnName.Substring(1)] ?? DBNull.Value).ToArray();
+                var rowValues = columns.Select(column => dataRow.FirstOrDefault(x => x.Key.ToLower() == column.ColumnName.ToLower()).Value ?? DBNull.Value).ToArray();
                 writer.WriteRow(rowValues);
             }
         }
-
         // Завершаем вставку
         await writer.CompleteAsync();
     }
@@ -67,11 +68,15 @@ private Type GetClrType(string sqlType)
             return typeof(decimal);
         case "text":
         case "varchar":
+        case  "char":
         case "character varying":
+        case "character":
             return typeof(string);
         case "boolean":
             return typeof(bool);
         case "date":
+            return typeof(DateTime);
+        case "timestamp without time zone":
             return typeof(DateTime);
         default:
             throw new NotSupportedException($"Unsupported SQL data type: {sqlType}");

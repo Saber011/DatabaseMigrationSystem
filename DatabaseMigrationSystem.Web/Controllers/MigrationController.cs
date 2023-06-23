@@ -1,7 +1,7 @@
-﻿using DatabaseMigrationSystem.Common.Dto;
+﻿using DatabaseMigrationSystem.Common;
+using DatabaseMigrationSystem.Common.Dto;
 using DatabaseMigrationSystem.UseCases.Migration.Commands;
 using DatabaseMigrationSystem.UseCases.Migration.Queries;
-using DatabaseMigrationSystem.UseCases.Settings.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,9 +27,13 @@ public class MigrationController : ControllerBase
     /// </summary>
     /// <response code = "200" > Успешное выполнение.</response>
     /// <response code = "500" > Непредвиденная ошибка сервера.</response>
-    [HttpPost]
-    public async Task<TableInfosDto> GetTables(GetSourceTablesQuery query, CancellationToken cancellationToken)
+    [HttpGet]
+    [ProducesResponseType(typeof(TableInfosDto),200)]
+    [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+    [ProducesResponseType(500)]
+    public async Task<TableInfosDto> GetTables(CancellationToken cancellationToken)
     {
+        var query = new GetSourceTablesQuery();
         return await _mediator.Send(query, cancellationToken);
     }
     
@@ -39,8 +43,12 @@ public class MigrationController : ControllerBase
     /// <response code = "200" > Успешное выполнение.</response>
     /// <response code = "500" > Непредвиденная ошибка сервера.</response>
     [HttpPost]
-    public async Task MigrateTables(MigrateTableCommand command, CancellationToken cancellationToken)
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+    [ProducesResponseType(500)]
+    public async Task MigrateTables(CancellationToken cancellationToken)
     {
+        var command = new MigrateTablesCommand();
         await _mediator.Send(command, cancellationToken);
     }
     
@@ -50,7 +58,10 @@ public class MigrationController : ControllerBase
     /// <response code = "200" > Успешное выполнение.</response>
     /// <response code = "500" > Непредвиденная ошибка сервера.</response>
     [HttpPost]
-    public async Task MigrateTable(SetSettingsCommand command, CancellationToken cancellationToken)
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+    [ProducesResponseType(500)]
+    public async Task MigrateTable(MigrateTableCommand command, CancellationToken cancellationToken)
     {
         await _mediator.Send(command, cancellationToken);
     }
@@ -60,20 +71,44 @@ public class MigrationController : ControllerBase
     /// </summary>
     /// <response code = "200" > Успешное выполнение.</response>
     /// <response code = "500" > Непредвиденная ошибка сервера.</response>
-    [HttpPost]
-    public async Task SetSettings3(SetSettingsCommand command, CancellationToken cancellationToken)
+    [HttpGet]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+    [ProducesResponseType(500)]
+    public async Task<MigrationStatusDto> GetStatus( CancellationToken cancellationToken)
     {
-        await _mediator.Send(command, cancellationToken);
+        var query = new GetMigrationStatusQuery();
+        return await _mediator.Send(query, cancellationToken);
     }
     
     /// <summary>
-    /// Получить сведения о данных в базах данных во всех таблицах
+    /// Получить данные об миграциях
+    /// </summary>
+    /// <response code = "200" > Успешное выполнение.</response>
+    /// <response code = "500" > Непредвиденная ошибка сервера.</response>
+    [HttpGet]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+    [ProducesResponseType(500)]
+    public async Task<List<UserMigrationData>> GetMigrationJournalData(CancellationToken cancellationToken)
+    {
+        var query = new GetMigrationJournalDataQuery();
+        return await _mediator.Send(query, cancellationToken);
+    }
+    
+    
+    /// <summary>
+    /// Получить статус миграции
     /// </summary>
     /// <response code = "200" > Успешное выполнение.</response>
     /// <response code = "500" > Непредвиденная ошибка сервера.</response>
     [HttpPost]
-    public async Task SetSettings4(SetSettingsCommand command, CancellationToken cancellationToken)
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+    [ProducesResponseType(500)]
+    public async Task CancelMigration( CancellationToken cancellationToken)
     {
+        var command = new CancelMigrateCommand();
         await _mediator.Send(command, cancellationToken);
     }
 }

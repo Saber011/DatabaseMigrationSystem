@@ -37,5 +37,9 @@ public class DataAccessModule : ApplicationModule
         services.AddScoped<IGetTableInfoRepositoryFactory, GetTableInfoRepositoryFactory>();
         services.AddScoped<IReadDataRepositoryFactory, ReadDataRepositoryFactory>();
         services.AddScoped<IWriteDataRepositoryFactory, WriteDataRepositoryFactory>();
+        services.AddScoped<IWriteMigrationLogRepository, WriteMigrationLogRepository>();
+        services.AddScoped<IGetMigrationLogRepository, GetMigrationLogRepository>();
+        services.AddScoped<IGetUserMigrationDataRepository, GetUserMigrationDataRepository>();
+        
     }
 }

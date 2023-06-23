@@ -2,6 +2,7 @@
 using DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration;
 using DatabaseMigrationSystem.Common.Dto.Request;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Settings;
+using DatabaseMigrationSystem.Infrastructure.Extentions;
 using DatabaseMigrationSystem.UseCases.Migration.Commands;
 using MediatR;
 
@@ -36,9 +37,11 @@ public class MigrateTableCommandHandler: IRequestHandler<MigrateTableCommand>
                 DestinationSchema = table.DestinationSchema,
                 DestinationTable = table.DestinationTable,
                 DestinationConnectionString = settings.DestinationConnectionString,
-                DestinationDatabaseType = settings.DestinationDatabaseType
+                DestinationDatabaseType = settings.DestinationDatabaseType,
+                UserId = user.Id
             };
-            await _dataMigratorService.Handle(dataMigrateRequest, cancellationToken);
+
+            _dataMigratorService.Handle(dataMigrateRequest, cancellationToken).FireAndForget();;
         }
 
         return default;

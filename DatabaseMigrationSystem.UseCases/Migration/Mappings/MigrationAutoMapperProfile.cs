@@ -9,6 +9,7 @@ public class MigrationAutoMapperProfile: Profile
     public MigrationAutoMapperProfile()
     {
         CreateMap<TableInfo, TableInfoDto>()
+            .ForMember(x => x.DataCount, opt => opt.MapFrom(x => x.RowCount))
             .ReverseMap();
     }
 }

@@ -22,14 +22,17 @@ public class GetTableInfoPostgresSqlRepository : IGetTableInfoRepository
 
         var tables = await connection.QueryAsync<TableInfo>(@"
                 SELECT 
-                    tc.table_name as TableName,
-                    tc.table_schema as Schema
-                FROM 
-                    information_schema.tables tc
-                WHERE 
-                    tc.table_schema NOT IN ('pg_catalog', 'information_schema')
-                ORDER BY 
-                    tc.table_name");
+                tc.table_name as TableName,
+                tc.table_schema as Schema,
+                pt.n_live_tup as RowCount
+            FROM 
+                information_schema.tables tc
+            INNER JOIN 
+                pg_stat_user_tables pt ON tc.table_name = pt.relname
+            WHERE 
+                tc.table_schema NOT IN ('pg_catalog', 'information_schema')
+            ORDER BY 
+                tc.table_name");
 
         var relations = await connection.QueryAsync<(string, string, string)>(@"
                 SELECT
@@ -55,7 +58,8 @@ public class GetTableInfoPostgresSqlRepository : IGetTableInfoRepository
             t => new TableInfo
             {
                 TableName = t.TableName,
-                Schema = t.Schema
+                Schema = t.Schema,
+                RowCount = t.RowCount,
             });
 
         foreach (var (parentTableName, childTableName, schema) in relations)

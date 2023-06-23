@@ -31,4 +31,9 @@ public class StartDataMigrate
     /// Тип базы данных
     /// </summary>
     public DatabaseType DestinationDatabaseType { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public int UserId { get; set; }
 }

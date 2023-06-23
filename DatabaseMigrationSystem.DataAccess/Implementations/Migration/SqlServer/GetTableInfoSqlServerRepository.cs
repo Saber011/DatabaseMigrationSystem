@@ -21,14 +21,21 @@ public class GetTableInfoSqlServerRepository: IGetTableInfoRepository
 
         var tables = await connection.QueryAsync<TableInfo>(@"
                 SELECT 
-                    t.name as TableName,
-                    s.name as ""Schema""
-                FROM 
-                    sys.tables t
-                INNER JOIN 
-                    sys.schemas s ON t.schema_id = s.schema_id
-                ORDER BY 
-                    t.name");
+                t.name as TableName,
+                s.name as ""Schema"",
+                p.rows as ""RowCount""
+            FROM 
+                sys.tables t
+            INNER JOIN 
+                sys.schemas s ON t.schema_id = s.schema_id
+            INNER JOIN
+                sys.partitions p ON t.object_id = p.object_id
+            WHERE
+                p.index_id IN (0, 1)
+            GROUP BY
+                t.name, s.name, p.rows
+            ORDER BY 
+                t.name");
 
         var relations = await connection.QueryAsync<(string, string, string, string)>(@"
                 SELECT
@@ -50,7 +57,8 @@ public class GetTableInfoSqlServerRepository: IGetTableInfoRepository
             t => new TableInfo
             {
                 TableName = t.TableName,
-                Schema = t.Schema
+                Schema = t.Schema,
+                RowCount = t.RowCount
             });
 
         foreach (var (parentTableName, childTableName, schema, _) in relations)
