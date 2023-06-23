@@ -14,10 +14,12 @@ public class GetUserRolesRepository : IGetUserRolesRepository
         _contextFactory = contextFactory;
     }
 
-    public async Task<UserRoles> Get(int request, CancellationToken cancellationToken)
+    public async Task<UserRoles[]> Get(int request, CancellationToken cancellationToken)
     {
         await using var context = _contextFactory();
 
-        return await context.UserRoles.FirstOrDefaultAsync(x => x.UserId == request, cancellationToken);
+        return await context.UserRoles
+            .Where(x => x.UserId == request)
+            .ToArrayAsync(cancellationToken);
     }
 }

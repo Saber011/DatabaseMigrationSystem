@@ -2,7 +2,7 @@
 
 namespace DatabaseMigrationSystem.DataAccess.Interfaces.User;
 
-public interface IGetUserRolesRepository : IGetRepository<int, UserRoles>
+public interface IGetUserRolesRepository : IGetRepository<int, UserRoles[]>
 {
     
 }

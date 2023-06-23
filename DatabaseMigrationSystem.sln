@@ -1,18 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrationSystem.Web", "DatabaseMigrationSystem.Web\DatabaseMigrationSystem.Web.csproj", "{6C577AD9-CBE5-4FB1-85FB-672505737EAA}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrationSystem.Web", "DatabaseMigrationSystem.Web\DatabaseMigrationSystem.Web.csproj", "{6C577AD9-CBE5-4FB1-85FB-672505737EAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrationSystem.Infrastructure", "DatabaseMigrationSystem.Infrastructure\DatabaseMigrationSystem.Infrastructure.csproj", "{C5626760-CBB7-4AB2-B9EA-44604778F601}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrationSystem.Infrastructure", "DatabaseMigrationSystem.Infrastructure\DatabaseMigrationSystem.Infrastructure.csproj", "{C5626760-CBB7-4AB2-B9EA-44604778F601}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrationSystem.UseCases", "DatabaseMigrationSystem.UseCases\DatabaseMigrationSystem.UseCases.csproj", "{6B9D9D1F-169C-48A2-808F-D8D5B1881BDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrationSystem.UseCases", "DatabaseMigrationSystem.UseCases\DatabaseMigrationSystem.UseCases.csproj", "{6B9D9D1F-169C-48A2-808F-D8D5B1881BDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrationSystem.Utils", "DatabaseMigrationSystem.Utils\DatabaseMigrationSystem.Utils.csproj", "{72BE0BB1-52F6-40AD-9978-437784E1AC4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrationSystem.Utils", "DatabaseMigrationSystem.Utils\DatabaseMigrationSystem.Utils.csproj", "{72BE0BB1-52F6-40AD-9978-437784E1AC4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrationSystem.DataAccess", "DatabaseMigrationSystem.DataAccess\DatabaseMigrationSystem.DataAccess.csproj", "{CF73F2C0-52DB-46C1-93C3-375976750243}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrationSystem.DataAccess", "DatabaseMigrationSystem.DataAccess\DatabaseMigrationSystem.DataAccess.csproj", "{CF73F2C0-52DB-46C1-93C3-375976750243}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrationSystem.ApplicationServices", "DatabaseMigrationSystem.ApplicationServices\DatabaseMigrationSystem.ApplicationServices.csproj", "{4C10B88B-EC56-47B6-A1D3-382219101896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrationSystem.ApplicationServices", "DatabaseMigrationSystem.ApplicationServices\DatabaseMigrationSystem.ApplicationServices.csproj", "{4C10B88B-EC56-47B6-A1D3-382219101896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrationSystem.Common", "DatabaseMigrationSystem.Common\DatabaseMigrationSystem.Common.csproj", "{E8D865DA-D7E9-4795-89F7-7065A702F8F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrationSystem.Common", "DatabaseMigrationSystem.Common\DatabaseMigrationSystem.Common.csproj", "{E8D865DA-D7E9-4795-89F7-7065A702F8F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +51,11 @@ Global
 		{E8D865DA-D7E9-4795-89F7-7065A702F8F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8D865DA-D7E9-4795-89F7-7065A702F8F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8D865DA-D7E9-4795-89F7-7065A702F8F6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NDepend) = preSolution
+		Project = ".\DatabaseMigrationSystem.ndproj"
 	EndGlobalSection
 EndGlobal

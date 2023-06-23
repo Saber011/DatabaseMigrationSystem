@@ -38,5 +38,5 @@ public sealed class User
     /// <summary>
     /// 
     /// </summary>
-    public ICollection<Settings> Settings { get; set; }
+    public Settings Settings { get; set; }
 }

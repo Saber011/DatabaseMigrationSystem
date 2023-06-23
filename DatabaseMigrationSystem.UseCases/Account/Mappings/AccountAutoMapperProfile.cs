@@ -15,7 +15,7 @@ public class AccountAutoMapperProfile: Profile
         CreateMap<UserToken, RefreshToken>()
             .ReverseMap();
         
-        CreateMap<AuthenticateCommand, User>()
+        CreateMap<AuthenticateCommand, Infrastructure.DbContext.Entities.User>()
             .ReverseMap();
         
 

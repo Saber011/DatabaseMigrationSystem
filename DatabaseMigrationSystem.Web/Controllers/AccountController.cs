@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DatabaseMigrationSystem.Common;
 using DatabaseMigrationSystem.Common.Dto;
 using DatabaseMigrationSystem.UseCases.Account.Commands;
 using MediatR;
@@ -28,13 +29,16 @@ namespace DatabaseMigrationSystem.Controllers
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpPost]
+        [ProducesResponseType(typeof(AuthenticateInfo),200)]
+        [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+        [ProducesResponseType(500)]
         public async Task<AuthenticateInfo> Authenticate(AuthenticateCommand request, CancellationToken cancellationToken)
         {
             request.IpAddress = IpAddress();
             
             var response = await _mediator.Send(request, cancellationToken);
         
-            SetTokenCookie(response.RefreshToken);
+            SetTokenCookie(response.RefreshToken, response.JwtToken);
 
             return response;
         }
@@ -45,18 +49,22 @@ namespace DatabaseMigrationSystem.Controllers
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpPost]
+        [ProducesResponseType(typeof(AuthenticateInfo),200)]
+        [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+        [ProducesResponseType(500)]
         public async Task<AuthenticateInfo> RefreshToken(CancellationToken cancellationToken)
         {
             var refreshToken = Request.Cookies["refreshToken"];
             var request = new RefreshTokenCommand()
             {
                 IpAddess = IpAddress(),
-                Token = refreshToken
+                Token = refreshToken,
+                AccessToken = Request.Cookies["accessToken"]
             };
             
             var response = await _mediator.Send(request, cancellationToken);
             
-            SetTokenCookie(response.RefreshToken);
+            SetTokenCookie(response.RefreshToken, response.JwtToken);
         
             return response;
         }
@@ -67,6 +75,9 @@ namespace DatabaseMigrationSystem.Controllers
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+        [ProducesResponseType(500)]
         public async Task RevokeToken(RevokeTokenCommand command, CancellationToken cancellationToken)
         {
             var token = command.Token ?? Request.Cookies["refreshToken"];
@@ -79,6 +90,8 @@ namespace DatabaseMigrationSystem.Controllers
                 IpAddess = IpAddress(),
                 Token = token
             };
+
+            DeleteTokenCookie();
             
             await _mediator.Send(request, cancellationToken);
         }
@@ -91,13 +104,16 @@ namespace DatabaseMigrationSystem.Controllers
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpPost]
         [AllowAnonymous]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+        [ProducesResponseType(500)]
         public async Task RegisterUser(RegisterUserCommand command, CancellationToken cancellationToken)
         {
             command.IpAddess = IpAddress();
             await _mediator.Send(command, cancellationToken);
         }
 
-        private void SetTokenCookie(string token)
+        private void SetTokenCookie(string token, string accessToken)
         {
             var cookieOptions = new CookieOptions
             {
@@ -105,11 +121,13 @@ namespace DatabaseMigrationSystem.Controllers
                 Expires = DateTime.UtcNow.AddDays(7)
             };
             Response.Cookies.Append("refreshToken", token, cookieOptions);
+            Response.Cookies.Append("accessToken", accessToken, cookieOptions);
         }
         
         private void DeleteTokenCookie()
         {
             Response.Cookies.Delete("refreshToken");
+            Response.Cookies.Delete("accessToken");
         }
 
         private string IpAddress()

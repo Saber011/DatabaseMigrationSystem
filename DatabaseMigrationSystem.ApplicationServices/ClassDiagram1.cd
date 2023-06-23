@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DatabaseMigrationSystem.ApplicationServices.Implementations.Account.GenerateJwtTokenService" BaseTypeListCollapsed="true">
+    <Position X="18.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Implementations\Account\GenerateJwtTokenService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.ApplicationServices.Implementations.Account.GenerateRefreshTokenService" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Implementations\Account\GenerateRefreshTokenService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.ApplicationServices.Implementations.Account.GetCurrentUserInfoService" BaseTypeListCollapsed="true">
+    <Position X="20.5" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAQAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Implementations\Account\GetCurrentUserInfoService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.ApplicationServices.Implementations.Migration.DataMigratorService" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAABAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Implementations\Migration\DataMigratorService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.ApplicationServices.ApplicationServicesModule">
+    <Position X="13.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ApplicationServicesModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Common.Dto.Request.MigrateTableRequest">
+    <Position X="19" Y="5.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Common.Dto.Request.StartDataMigrate">
+    <Position X="17.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Common.Dto.AuthenticateInfo">
+    <Position X="15.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Common.Dto.RefreshToken">
+    <Position X="15.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Common.Dto.TableInfoDto">
+    <Position X="21" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Common.Dto.TableInfosDto">
+    <Position X="13.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Common.Enums.DatabaseType">
+    <Position X="13.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.Configurations.JwtSettings">
+    <Position X="11.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.Configurations.PostgresSettings">
+    <Position X="3.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.Entities.Role">
+    <Position X="6" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.Entities.Settings">
+    <Position X="11.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.Entities.User">
+    <Position X="8" Y="7.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.Entities.UserRoles">
+    <Position X="10" Y="9.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.Entities.UserToken">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.EntityConfigurations.RoleConfiguration">
+    <Position X="9.75" Y="6" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.EntityConfigurations.SettingsConfiguration">
+    <Position X="5.75" Y="6.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.EntityConfigurations.UserConfiguration">
+    <Position X="9.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.EntityConfigurations.UserRolesConfiguration">
+    <Position X="11.25" Y="3.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.EntityConfigurations.UserTokenConfiguration">
+    <Position X="17.25" Y="9.5" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.DbContext.ApplicationDbContext">
+    <Position X="3.75" Y="6.5" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.PipelineBehavior.ValidationBehavior&lt;TRequest, TResponse&gt;">
+    <Position X="19.75" Y="9" Width="3" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.Validators.ConnectionValidator" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="6" Width="1.75" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Infrastructure.InfrastructureModule">
+    <Position X="13.5" Y="7" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Utils.Modules.ApplicationModule">
+    <Position X="15.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Utils.Modules.ServiceCollectionExtensions">
+    <Position X="20" Y="4.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DatabaseMigrationSystem.Utils.RetryHelper">
+    <Position X="17.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.Account.IGenerateJwtTokenService">
+    <Position X="4.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\Account\IGenerateJwtTokenService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.Account.IGenerateRefreshTokenService">
+    <Position X="6.5" Y="1.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\Account\IGenerateRefreshTokenService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.Account.IGetCurrentUserInfoService">
+    <Position X="8.25" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\Account\IGetCurrentUserInfoService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration.IDataMigratorService">
+    <Position X="12.5" Y="1.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\Migration\IDataMigratorService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration.IGetTableInfoService">
+    <Position X="5.5" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\Migration\IGetTableInfoService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration.IMigrationService">
+    <Position X="10.25" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\Migration\IMigrationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.Migration.IMigrationServiceFactory">
+    <Position X="17.5" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\Migration\IMigrationServiceFactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.IApplicationService&lt;TRequest, TResult&gt;">
+    <Position X="8" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IApplicationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.ApplicationServices.Interfaces.IApplicationService&lt;TResult&gt;">
+    <Position X="6.75" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IApplicationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DatabaseMigrationSystem.Infrastructure.Validators.IConnectionValidator">
+    <Position X="3.75" Y="9.25" Width="1.75" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

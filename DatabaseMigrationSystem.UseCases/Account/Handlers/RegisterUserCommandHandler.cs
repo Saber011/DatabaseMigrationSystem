@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Action.Platform.Common.Exceptions;
+using AutoMapper;
 using DatabaseMigrationSystem.ApplicationServices.Interfaces.Account;
 using DatabaseMigrationSystem.DataAccess.Interfaces.User;
 using DatabaseMigrationSystem.Infrastructure.DbContext.Entities;
@@ -40,10 +41,10 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand>
 
         if (user is not null)
         {
-            throw new ValidationException("Данный пользователь уже был зарегестрирован");
+            throw new BrokenRulesException("Данный пользователь уже был зарегестрирован");
         }
 
-        var newUser = new User
+        var newUser = new Infrastructure.DbContext.Entities.User
         {
             Login = request.Login,
             Password = passwordHash,
