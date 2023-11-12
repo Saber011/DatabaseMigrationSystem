@@ -13,8 +13,6 @@ namespace DatabaseMigrationSystem.UseCases
         {
             services.AddMediatR(typeof(AccountAutoMapperProfile));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            services.AddValidatorsFromAssembly(typeof(UseCasesModule).Assembly);
-            
         }
     }
 }
