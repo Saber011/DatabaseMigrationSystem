@@ -1,0 +1,67 @@
+﻿<div>
+  <div class="container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+    <mat-form-field appearance="fill" id="filter">
+      <mat-label>Фильтр</mat-label>
+      <input matInput type="text" id="filterInput" name="filterInput" (input)="applyFilter($event)">
+    </mat-form-field>
+    <!-- Rest of your code -->
+  </div>
+
+
+
+<mat-table [dataSource]="dataSource">
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+    </ng-container>
+
+    <!-- Start Date Column -->
+    <ng-container matColumnDef="startDate">
+      <mat-header-cell *matHeaderCellDef> Дата старта миграции </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.startDate}} </mat-cell>
+    </ng-container>
+
+    <!-- End Date Column -->
+    <ng-container matColumnDef="endDate">
+      <mat-header-cell *matHeaderCellDef> Дата завершения миграции </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.endDate}} </mat-cell>
+    </ng-container>
+
+    <!-- Source DB Column -->
+    <ng-container matColumnDef="sourceDatabase">
+      <mat-header-cell *matHeaderCellDef> Исходная база данных </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.sourceDatabase}} </mat-cell>
+    </ng-container>
+
+    <!-- Remote DB Column -->
+    <ng-container matColumnDef="destinationDatabase">
+      <mat-header-cell *matHeaderCellDef> Удаленная база данных </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.destinationDatabase}} </mat-cell>
+    </ng-container>
+
+    <!-- Tables List Column -->
+    <ng-container matColumnDef="tableList">
+      <mat-header-cell *matHeaderCellDef> таблица </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.tableList}} </mat-cell>
+    </ng-container>
+
+    <!-- Total Execution Time Column -->
+    <ng-container matColumnDef="executionTime">
+      <mat-header-cell *matHeaderCellDef> Общее время выполнения </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.executionTime}} </mat-cell>
+    </ng-container>
+
+    <!-- Migration Status Column -->
+    <ng-container matColumnDef="migrationStatus">
+      <mat-header-cell *matHeaderCellDef> Статус миграции </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.migrationStatus}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

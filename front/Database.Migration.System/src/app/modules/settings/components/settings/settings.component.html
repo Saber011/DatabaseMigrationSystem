@@ -1,0 +1,36 @@
+﻿<div class="settings-form">
+  <h2>Настройки</h2>
+  <form  [formGroup]="form" (submit)="saveSettings()">
+    <mat-form-field appearance="fill">
+      <mat-label>Source Connection String</mat-label>
+      <input matInput placeholder="Source Connection String" name="source_connection_string" formControlName="sourceConnectionString" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Choose source DB type</mat-label>
+      <mat-select name="source_database_type" formControlName="sourceDatabaseType" required>
+        <mat-option value="2">Oracle</mat-option>
+        <mat-option value="0">MsSql</mat-option>
+        <mat-option value="3">MySql</mat-option>
+        <mat-option value="1">PostgresSql</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Remote Connection String</mat-label>
+      <input matInput placeholder="Remote Connection String" name="remote_connection_string" formControlName="destinationConnectionString" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Choose remote DB type</mat-label>
+      <mat-select name="remote_database_type" formControlName="destinationDatabaseType" required>
+        <mat-option value="2">Oracle</mat-option>
+        <mat-option value="0">MsSql</mat-option>
+        <mat-option value="3">MySql</mat-option>
+        <mat-option value="1">PostgresSql</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Сохранить</button>
+  </form>
+</div>
