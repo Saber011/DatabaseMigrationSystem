@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./DatabaseMigrationSystem/DatabaseMigrationSystem.Web/
+        working-directory: ./DatabaseMigrationSystem.Web/
 
     steps:
     - uses: actions/checkout@v2
