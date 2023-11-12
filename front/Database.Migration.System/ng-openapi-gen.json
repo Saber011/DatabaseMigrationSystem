@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "./node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
   "input": "http://localhost:5000/api-docs/v1/swagger.json",
   "output": "src/app/api",
