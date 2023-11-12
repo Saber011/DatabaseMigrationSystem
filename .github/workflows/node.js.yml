@@ -1,0 +1,21 @@
+name: Angular
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front/Database.Migration.System/
+    steps:
+      - uses: actions/checkout@v2
+      # Build
+      - run: npm ci
+      - run: npm run build
+      # Deploy
+      - run: rsync --rsh="sshpass -p ${{secrets.PASSWORD}} ssh -o StrictHostKeyChecking=no -l ${{secrets.USERNAME}}" --archive --compress --delete dist/front ${{secrets.HOST}}:/var/www/

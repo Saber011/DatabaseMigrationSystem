@@ -26,7 +26,7 @@ jobs:
     - name: Build
       run: dotnet publish -r linux-x64 -o cur
     # Deploy
-    - run: rsync --rsh="sshpass -p ${{secrets.PASSWORD}} ssh -o StrictHostKeyChecking=no -l ${{secrets.USERNAME}}" --archive --compress --delete /home/runner/work/cur/ ${{secrets.HOST}}:/srv/app/
+    - run: rsync --rsh="sshpass -p ${{secrets.PASSWORD}} ssh -o StrictHostKeyChecking=no -l ${{secrets.USERNAME}}" --archive --compress --delete /home/runner/work/DatabaseMigrationSystem/DatabaseMigrationSystem/DatabaseMigrationSystem.Web/cur/ ${{secrets.HOST}}:/srv/app/
     - name: restart service
       uses: appleboy/ssh-action@master
       with:
