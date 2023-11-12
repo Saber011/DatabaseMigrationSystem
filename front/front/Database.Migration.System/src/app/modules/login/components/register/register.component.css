@@ -1,0 +1,39 @@
+﻿.register-form {
+  width: 300px;
+  margin: 0 auto;
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+.register-form h2 {
+  text-align: center;
+  color: #4d4d4d;
+  font-size: 24px;
+  padding: 20px 0 20px 0;
+}
+
+.register-field {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #dddddd;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.register-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #535b63;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.login-button {
+  text-align: center;
+  display: block;
+  padding: 10px;
+  cursor: pointer;
+  color: #535b63;
+  font-weight: bold;
+}
