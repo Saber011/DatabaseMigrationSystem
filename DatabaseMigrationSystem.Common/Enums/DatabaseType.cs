@@ -29,5 +29,11 @@ public enum DatabaseType
     /// 
     /// </summary>
     [Description(nameof(MySQl))]
-    MySQl
+    MySQl,
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [Description(nameof(MongoDb))]
+    MongoDb
 }

@@ -1,4 +1,4 @@
-﻿/* tslint:disable */
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpContext } from '@angular/common/http';
@@ -31,6 +31,10 @@ export class UserService extends BaseService {
   static readonly ApiUserGetAllUsersGetPath = '/api/User/GetAllUsers';
 
   /**
+   * Получить всех пользователей.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiUserGetAllUsersGet()` instead.
    *
@@ -61,6 +65,10 @@ export class UserService extends BaseService {
   }
 
   /**
+   * Получить всех пользователей.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiUserGetAllUsersGet$Response()` instead.
    *
@@ -84,6 +92,10 @@ export class UserService extends BaseService {
   static readonly ApiUserGetUserByIdGetPath = '/api/User/GetUserById';
 
   /**
+   * Получить пользователя по id.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiUserGetUserByIdGet()` instead.
    *
@@ -114,6 +126,10 @@ export class UserService extends BaseService {
   }
 
   /**
+   * Получить пользователя по id.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiUserGetUserByIdGet$Response()` instead.
    *
@@ -137,6 +153,10 @@ export class UserService extends BaseService {
   static readonly ApiUserDeleteUserPostPath = '/api/User/DeleteUser';
 
   /**
+   * Получить удалить пользователя.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiUserDeleteUserPost()` instead.
    *
@@ -167,6 +187,10 @@ export class UserService extends BaseService {
   }
 
   /**
+   * Получить удалить пользователя.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiUserDeleteUserPost$Response()` instead.
    *

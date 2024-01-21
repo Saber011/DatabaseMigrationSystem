@@ -77,67 +77,67 @@ export class MigrationsComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.refreshData();
+   // this.refreshData();
     this.checkStatus();
   }
 
 
-  private refreshData() {
-    this.migrationService.apiMigrationGetTablesGet()
-      .subscribe(value => {
-        this.isDataLoaded = true;
-        if(value && value.sourceTables && value.destinationTables && value.sourceTables.length > 0 && value.destinationTables.length > 0) {
-          this.isDataAvailable = true;
-          value.sourceTables.forEach(table => {
-            table.selected = false;
-            table.bindingNumber = null;
-          });
-          value.destinationTables.forEach(table => {
-            table.selected = false;
-            table.bindingNumber = null;
-          });
-          this.dataSource = new MatTableDataSource(value.sourceTables);
-          this.dataSource2 = new MatTableDataSource(value.destinationTables);
-          this.dataSource.sort = this.sort;
-          this.dataSource2.sort = this.sort;
-        } else {
-          this.isDataAvailable = false;
-        }
-      });
-  }
+  // private refreshData() {
+  //   this.migrationService.apiMigrationGetTablesGet()
+  //     .subscribe(value => {
+  //       this.isDataLoaded = true;
+  //       if(value && value.sourceTables && value.destinationTables && value.sourceTables.length > 0 && value.destinationTables.length > 0) {
+  //         this.isDataAvailable = true;
+  //         value.sourceTables.forEach(table => {
+  //           table.selected = false;
+  //           table.bindingNumber = null;
+  //         });
+  //         value.destinationTables.forEach(table => {
+  //           table.selected = false;
+  //           table.bindingNumber = null;
+  //         });
+  //         this.dataSource = new MatTableDataSource(value.sourceTables);
+  //         this.dataSource2 = new MatTableDataSource(value.destinationTables);
+  //         this.dataSource.sort = this.sort;
+  //         this.dataSource2.sort = this.sort;
+  //       } else {
+  //         this.isDataAvailable = false;
+  //       }
+  //     });
+  // }
 
 
-  startMigrate() {
-    const selectedSourceTables = this.dataSource.data.filter(x => x.selected);
-    const selectedDestinationTables = this.dataSource2.data.filter(x => x.selected);
-
-    const migrateTableRequests: MigrateTableRequest[] = selectedSourceTables.map(sourceTable => {
-      const correspondingDestinationTable = selectedDestinationTables.find(destTable => destTable.bindingNumber === sourceTable.bindingNumber);
-      if (correspondingDestinationTable) {
-        return {
-          sourceSchema: sourceTable.schema,
-          sourceTable: sourceTable.tableName,
-          destinationSchema: correspondingDestinationTable.schema,
-          destinationTable: correspondingDestinationTable.tableName,
-        };
-      }
-      return null;
-    }).filter(x => x !== null) as MigrateTableRequest[];
-
-    if(migrateTableRequests.length > 0){
-      this.migrationService.apiMigrationMigrateTablePost({ body: {tables: migrateTableRequests}})
-        .subscribe(x => {
-          this.migrationStarted = true;
-          this.migrationMessage = 'Миграция запущена.';
-        });
-    } else {
-      this.migrationService.apiMigrationMigrateTablesPost()
-        .subscribe(x => {
-          this.migrationStarted = true;
-          this.migrationMessage = 'Миграция запущена.';
-        })
-    }
-  }
+  // startMigrate() {
+  //   const selectedSourceTables = this.dataSource.data.filter(x => x.selected);
+  //   const selectedDestinationTables = this.dataSource2.data.filter(x => x.selected);
+  //
+  //   const migrateTableRequests: MigrateTableRequest[] = selectedSourceTables.map(sourceTable => {
+  //     const correspondingDestinationTable = selectedDestinationTables.find(destTable => destTable.bindingNumber === sourceTable.bindingNumber);
+  //     if (correspondingDestinationTable) {
+  //       return {
+  //         sourceSchema: sourceTable.schema,
+  //         sourceTable: sourceTable.tableName,
+  //         destinationSchema: correspondingDestinationTable.schema,
+  //         destinationTable: correspondingDestinationTable.tableName,
+  //       };
+  //     }
+  //     return null;
+  //   }).filter(x => x !== null) as MigrateTableRequest[];
+  //
+  //   if(migrateTableRequests.length > 0){
+  //     this.migrationService.apiMigrationMigrateTablePost({ body: {tables: migrateTableRequests}})
+  //       .subscribe(x => {
+  //         this.migrationStarted = true;
+  //         this.migrationMessage = 'Миграция запущена.';
+  //       });
+  //   } else {
+  //     this.migrationService.apiMigrationMigrateTablesPost()
+  //       .subscribe(x => {
+  //         this.migrationStarted = true;
+  //         this.migrationMessage = 'Миграция запущена.';
+  //       })
+  //   }
+  // }
 
 
   cancelMigrate() {
@@ -145,7 +145,7 @@ export class MigrationsComponent implements OnInit {
       .subscribe(x => {
         this.migrationStarted = false;
         this.migrationMessage = 'Миграция остановленна.';
-        this.refreshData();
+       // this.refreshData();
       })
   }
 
@@ -157,7 +157,7 @@ export class MigrationsComponent implements OnInit {
         this.migrationStarted = (x.status != 2 && x.status != 3) ||
           (x.currentTable?.toLowerCase() !== matchingTable.tableName?.toLowerCase() );
         this.migrationMessage = 'Текущая таблица в миграции ' + x.currentTable;
-        this.refreshData();
+        //this.refreshData();
 
       })
   }
@@ -177,33 +177,33 @@ export class MigrationsComponent implements OnInit {
   }
 
 
-  onSourceTableSelected(event: MatCheckboxChange, element: TableElement) {
-    const selected = event.checked;
-    const matchingTable = this.dataSource2.data.find(
-      item => item.tableName?.toLowerCase() == element.tableName.toLowerCase()
-    );
-
-    if (matchingTable) {
-      matchingTable.selected = selected;
-      element.selected = selected;
-      if (selected) {
-        this.bindingCounter++;
-        element.bindingNumber = this.bindingCounter;
-        matchingTable.bindingNumber = this.bindingCounter;
-
-      } else {
-        if(this.bindingCounter > 1){
-          this.bindingCounter--;
-          element.bindingNumber = null;
-          matchingTable.bindingNumber = null;
-        } else {
-          element.bindingNumber = null;
-          matchingTable.bindingNumber = null;
-          this.bindingCounter = 0;
-        }
-      }
-    }
-  }
+  // onSourceTableSelected(event: MatCheckboxChange, element: TableElement) {
+  //   const selected = event.checked;
+  //   const matchingTable = this.dataSource2.data.find(
+  //     item => item.tableName?.toLowerCase() == element.tableName.toLowerCase()
+  //   );
+  //
+  //   if (matchingTable) {
+  //     matchingTable.selected = selected;
+  //     element.selected = selected;
+  //     if (selected) {
+  //       this.bindingCounter++;
+  //       element.bindingNumber = this.bindingCounter;
+  //       matchingTable.bindingNumber = this.bindingCounter;
+  //
+  //     } else {
+  //       if(this.bindingCounter > 1){
+  //         this.bindingCounter--;
+  //         element.bindingNumber = null;
+  //         matchingTable.bindingNumber = null;
+  //       } else {
+  //         element.bindingNumber = null;
+  //         matchingTable.bindingNumber = null;
+  //         this.bindingCounter = 0;
+  //       }
+  //     }
+  //   }
+  // }
 }
 interface Table {
   name: string;

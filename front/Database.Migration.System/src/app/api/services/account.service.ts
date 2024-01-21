@@ -1,4 +1,4 @@
-﻿/* tslint:disable */
+/* tslint:disable */
 /* eslint-disable */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpContext } from '@angular/common/http';
@@ -31,6 +31,10 @@ export class AccountService extends BaseService {
   static readonly ApiAccountAuthenticatePostPath = '/api/Account/Authenticate';
 
   /**
+   * Авторизация.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiAccountAuthenticatePost()` instead.
    *
@@ -61,6 +65,10 @@ export class AccountService extends BaseService {
   }
 
   /**
+   * Авторизация.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiAccountAuthenticatePost$Response()` instead.
    *
@@ -84,6 +92,10 @@ export class AccountService extends BaseService {
   static readonly ApiAccountRefreshTokenPostPath = '/api/Account/RefreshToken';
 
   /**
+   * Получить рефреш токен.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiAccountRefreshTokenPost()` instead.
    *
@@ -112,6 +124,10 @@ export class AccountService extends BaseService {
   }
 
   /**
+   * Получить рефреш токен.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiAccountRefreshTokenPost$Response()` instead.
    *
@@ -134,6 +150,10 @@ export class AccountService extends BaseService {
   static readonly ApiAccountRevokeTokenPostPath = '/api/Account/RevokeToken';
 
   /**
+   * Удалить токен.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiAccountRevokeTokenPost()` instead.
    *
@@ -164,6 +184,10 @@ export class AccountService extends BaseService {
   }
 
   /**
+   * Удалить токен.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiAccountRevokeTokenPost$Response()` instead.
    *
@@ -187,6 +211,10 @@ export class AccountService extends BaseService {
   static readonly ApiAccountRegisterUserPostPath = '/api/Account/RegisterUser';
 
   /**
+   * Регистрация нового пользователя.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiAccountRegisterUserPost()` instead.
    *
@@ -217,6 +245,10 @@ export class AccountService extends BaseService {
   }
 
   /**
+   * Регистрация нового пользователя.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiAccountRegisterUserPost$Response()` instead.
    *

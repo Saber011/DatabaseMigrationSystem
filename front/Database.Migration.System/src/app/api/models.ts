@@ -1,6 +1,7 @@
-﻿export { AuthenticateCommand } from './models/authenticate-command';
+export { AuthenticateCommand } from './models/authenticate-command';
 export { AuthenticateInfo } from './models/authenticate-info';
 export { BrokenRule } from './models/broken-rule';
+export { CurrentMigrationSettingsDto } from './models/current-migration-settings-dto';
 export { DatabaseType } from './models/database-type';
 export { DeleteUserCommand } from './models/delete-user-command';
 export { GetUsersQuery } from './models/get-users-query';

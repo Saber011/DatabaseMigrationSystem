@@ -1,4 +1,4 @@
-﻿/* tslint:disable */
+/* tslint:disable */
 /* eslint-disable */
 import { RefreshToken } from './refresh-token';
 export interface UserDto {

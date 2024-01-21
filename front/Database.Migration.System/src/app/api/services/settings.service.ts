@@ -29,6 +29,10 @@ export class SettingsService extends BaseService {
   static readonly ApiSettingsSetSettingsPostPath = '/api/Settings/SetSettings';
 
   /**
+   * Задать настройки.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiSettingsSetSettingsPost()` instead.
    *
@@ -59,6 +63,10 @@ export class SettingsService extends BaseService {
   }
 
   /**
+   * Задать настройки.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiSettingsSetSettingsPost$Response()` instead.
    *
@@ -82,6 +90,10 @@ export class SettingsService extends BaseService {
   static readonly ApiSettingsGetSettingsGetPath = '/api/Settings/GetSettings';
 
   /**
+   * Задать настройки.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiSettingsGetSettingsGet()` instead.
    *
@@ -110,6 +122,10 @@ export class SettingsService extends BaseService {
   }
 
   /**
+   * Задать настройки.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiSettingsGetSettingsGet$Response()` instead.
    *

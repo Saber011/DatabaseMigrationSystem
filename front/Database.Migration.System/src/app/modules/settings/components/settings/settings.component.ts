@@ -28,9 +28,9 @@ export class SettingsComponent implements OnInit {
         setTimeout(() => {
           this.form.patchValue({
             sourceConnectionString: value.sourceConnectionString,
-            sourceDatabaseType: Number(value.sourceDatabaseType).toString(),
+            sourceDatabaseType: value.sourceDatabaseType,
             destinationConnectionString: value.destinationConnectionString,
-            destinationDatabaseType: Number(value.destinationDatabaseType).toString()
+            destinationDatabaseType: value.destinationDatabaseType
           });
         });
       });

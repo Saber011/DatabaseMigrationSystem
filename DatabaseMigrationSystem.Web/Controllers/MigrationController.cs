@@ -4,6 +4,8 @@ using DatabaseMigrationSystem.UseCases.Migration.Commands;
 using DatabaseMigrationSystem.UseCases.Migration.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace DatabaseMigrationSystem.Controllers;
 
@@ -75,7 +77,7 @@ public class MigrationController : ControllerBase
     [ProducesResponseType(200)]
     [ProducesResponseType(typeof(IList<BrokenRule>),400)]
     [ProducesResponseType(500)]
-    public async Task<MigrationStatusDto> GetStatus( CancellationToken cancellationToken)
+    public async Task<MigrationStatusDto> GetStatus(CancellationToken cancellationToken)
     {
         var query = new GetMigrationStatusQuery();
         return await _mediator.Send(query, cancellationToken);
@@ -106,9 +108,23 @@ public class MigrationController : ControllerBase
     [ProducesResponseType(200)]
     [ProducesResponseType(typeof(IList<BrokenRule>),400)]
     [ProducesResponseType(500)]
-    public async Task CancelMigration( CancellationToken cancellationToken)
+    public async Task CancelMigration(CancellationToken cancellationToken)
     {
         var command = new CancelMigrateCommand();
         await _mediator.Send(command, cancellationToken);
+    }
+    
+    /// <summary>
+    /// Получить информацию по заданнаном подключении
+    /// </summary>
+    /// <response code = "200" > Успешное выполнение.</response>
+    /// <response code = "500" > Непредвиденная ошибка сервера.</response>
+    [HttpGet]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+    [ProducesResponseType(500)]
+    public async Task<CurrentMigrationSettingsDto> GetCurrentMigrationSettings(CancellationToken cancellationToken)
+    {
+        return await _mediator.Send(new GetCurrentMigrationSettingsQuery(), cancellationToken);
     }
 }
