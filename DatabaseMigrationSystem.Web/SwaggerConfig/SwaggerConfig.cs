@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace DatabaseMigrationSystem.SwaggerConfig
 {
@@ -12,6 +13,8 @@ namespace DatabaseMigrationSystem.SwaggerConfig
             services.AddSwaggerGen(config =>
             {
 
+                ApplyDocumentation(config, new List<string>());
+                
                 // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 // config.IncludeXmlComments(xmlPath);
@@ -69,6 +72,29 @@ namespace DatabaseMigrationSystem.SwaggerConfig
                 config.RoutePrefix = string.Empty;
                 config.DisplayRequestDuration();
             });
+        }
+        
+        
+        private static void ApplyDocumentation(SwaggerGenOptions options,
+            IList<string> xmlDocumentationFiles)
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            foreach (var assembly in assemblies)
+            {
+                var xmlDocumentationFileName = assembly.GetName()
+                                                   .Name
+                                               + ".xml";
+
+                var xmlDocumentationFile = Path.Combine(baseDirectory, xmlDocumentationFileName);
+
+                if (File.Exists(xmlDocumentationFile))
+                {
+                    xmlDocumentationFiles.Add(xmlDocumentationFile);
+                    options.IncludeXmlComments(xmlDocumentationFile);
+                }
+            }
         }
     }
 }

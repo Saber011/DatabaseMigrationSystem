@@ -7,33 +7,19 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {map} from "rxjs/operators";
 import {MigrateTableRequest} from "../../../../api/models/migrate-table-request";
-import {Router} from "@angular/router";
 
-export interface TableElement {
-  schemaName: string;
-  tableName: string;
-  dataCount: number;
-  selected?: null | boolean;
-  bindingNumber: null | number;
-}
 
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './api.component.html',
+  styleUrls: ['./api.component.css']
 })
-export class HomeComponent implements OnInit {
+export class ApiComponent implements OnInit {
 
-
-  constructor(private router: Router,) {
+  constructor()  {
   }
+
   ngOnInit(){
-
-  }
-
-
-  onClick() {
-    this.router.navigate(['/home/migrations']);
   }
 }

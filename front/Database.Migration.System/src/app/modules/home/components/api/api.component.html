@@ -1,0 +1,65 @@
+﻿<div>
+  <p>Данный раздел описывает как интегрироваться с публичным API системы. </p>
+
+  <p>Для выполнения любых операций в системе необходимо сперва пройти регистрацию, а после этого получать токен доступа
+    для обращения к любому доступуному методу, токен передается в заголовке accessToken. </p>
+</div>
+
+<mat-accordion>
+  <!-- Контроллер Account -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Account</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="api-method">
+      <h3>POST /api/Account/Authenticate</h3>
+      <p>Аутентификация пользователя в системе.</p>
+      <!-- Здесь можно добавить дополнительные детали о методе -->
+    </div>
+    <!-- Добавьте описание других методов Account здесь -->
+  </mat-expansion-panel>
+
+  <!-- Контроллер Migration -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Migration</mat-panel-title>
+    </mat-expansion-panel-header>
+    <!-- Описание методов раздела Migration -->
+  </mat-expansion-panel>
+
+  <!-- Контроллер Migration -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Settings</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="api-method">
+      <h3>POST api/Settings/SetSettings</h3>
+      <p>Установить настройки пользователя.</p>
+      Request body
+      '{{ "{" }}'
+      "sourceConnectionString": "string",
+      "sourceDatabaseType": 0,
+      "destinationConnectionString": "string",
+      "destinationDatabaseType": 0
+      '{{ "}" }}'
+    </div>
+
+    <div class="api-method">
+      <h3>GET /api/Settings/GetSettings</h3>
+      <p>Получит настройки пользователя.</p>
+      Данные получаются по переданному токену accessToken.
+    </div>
+  </mat-expansion-panel>
+
+  <!-- Контроллер Migration -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>User</mat-panel-title>
+    </mat-expansion-panel-header>
+    <!-- Описание методов раздела Migration -->
+  </mat-expansion-panel>
+</mat-accordion>
+
+<mat-card-actions>
+  <a href="http://localhost:8080/swagger" target="_blank">Swagger документация</a>
+</mat-card-actions>

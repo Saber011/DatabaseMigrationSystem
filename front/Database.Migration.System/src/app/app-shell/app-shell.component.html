@@ -1,11 +1,12 @@
-﻿
+﻿<div class="main">
   <ng-container *ngIf="userInfo">
     <div class="header">
       <div>
-        <a href="/journal">Журнал миграций</a>
-        <a href="/settings">Настройки</a>
         <a href="/home">Главная</a>
+        <a href="/settings">Настройки</a>
+        <a href="/journal">Журнал миграций</a>
         <a *ngIf="userInfo.login == 'admin1'" href="/administration">Управление пользователями</a>
+        <a href="/home/api">Документация API</a>
       </div>
       <div class="dropdown" (click)="toggleDropdown()">
         <span>Привет, {{userInfo.login}}</span>
@@ -16,7 +17,17 @@
     </div>
   </ng-container>
 
-
   <main>
     <router-outlet></router-outlet>
   </main>
+
+  <ng-container *ngIf="userInfo">
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2024 Дипломная работа. Все права защищены.</p>
+      <p>Для поддержки и вопросов: <a href="mailto:support@company.com">shevchu2012@mail.ru</a></p>
+      <p><a href="home/privacy-policy">Политика конфиденциальности</a> | <a href="home/terms-of-service">Условия использования</a></p>
+    </div>
+  </footer>
+  </ng-container>
+</div>

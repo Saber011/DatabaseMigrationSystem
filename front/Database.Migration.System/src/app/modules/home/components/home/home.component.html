@@ -1,89 +1,117 @@
-﻿<form [formGroup]="form" (ngSubmit)="startMigrate()">
-<div class="container">
+﻿<!--<form [formGroup]="form" (ngSubmit)="startMigrate()">-->
+<!--<div class="container">-->
 
 
-  <div>
-    <h2>Исходная база</h2>
-  <mat-table #table [dataSource]="dataSource">
-    <ng-container matColumnDef="schemaName">
-      <mat-header-cell *matHeaderCellDef> Наименование схемы </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.schema}} </mat-cell>
-    </ng-container>
+<!--  <div>-->
+<!--    <h2>Исходная база</h2>-->
+<!--  <mat-table #table [dataSource]="dataSource">-->
+<!--    <ng-container matColumnDef="schemaName">-->
+<!--      <mat-header-cell *matHeaderCellDef> Наименование схемы </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element"> {{element.schema}} </mat-cell>-->
+<!--    </ng-container>-->
 
-    <ng-container matColumnDef="tableName">
-      <mat-header-cell *matHeaderCellDef> Наименование таблицы </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.tableName}} </mat-cell>
-    </ng-container>
+<!--    <ng-container matColumnDef="tableName">-->
+<!--      <mat-header-cell *matHeaderCellDef> Наименование таблицы </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element"> {{element.tableName}} </mat-cell>-->
+<!--    </ng-container>-->
 
-    <ng-container matColumnDef="dataCount">
-      <mat-header-cell *matHeaderCellDef> Количество данных </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dataCount}} </mat-cell>
-    </ng-container>
+<!--    <ng-container matColumnDef="dataCount">-->
+<!--      <mat-header-cell *matHeaderCellDef> Количество данных </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element"> {{element.dataCount}} </mat-cell>-->
+<!--    </ng-container>-->
 
-    <ng-container matColumnDef="select">
-      <ng-container matColumnDef="select">
-        <mat-header-cell *matHeaderCellDef> Выбор </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.selected" (change)="onSourceTableSelected($event, element)"></mat-checkbox>
-        </mat-cell>
-      </ng-container>
-    </ng-container>
-    <ng-container matColumnDef="bindingNumber">
-      <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element?.bindingNumber}} </mat-cell>
-    </ng-container>
+<!--    <ng-container matColumnDef="select">-->
+<!--      <ng-container matColumnDef="select">-->
+<!--        <mat-header-cell *matHeaderCellDef> Выбор </mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let element">-->
+<!--          <mat-checkbox [checked]="element.selected" (change)="onSourceTableSelected($event, element)"></mat-checkbox>-->
+<!--        </mat-cell>-->
+<!--      </ng-container>-->
+<!--    </ng-container>-->
+<!--    <ng-container matColumnDef="bindingNumber">-->
+<!--      <mat-header-cell *matHeaderCellDef>  </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element"> {{element?.bindingNumber}} </mat-cell>-->
+<!--    </ng-container>-->
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
- </div>
+<!--    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+<!--    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>-->
+<!--  </mat-table>-->
+<!-- </div>-->
 
-  <div>
-  <h2>Удаленная база</h2>
-  <mat-table #table2 [dataSource]="dataSource2">
-    <ng-container matColumnDef="schemaName">
-      <mat-header-cell *matHeaderCellDef> Наименование схемы </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.schema}} </mat-cell>
-    </ng-container>
+<!--  <div>-->
+<!--  <h2>Удаленная база</h2>-->
+<!--  <mat-table #table2 [dataSource]="dataSource2">-->
+<!--    <ng-container matColumnDef="schemaName">-->
+<!--      <mat-header-cell *matHeaderCellDef> Наименование схемы </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element"> {{element.schema}} </mat-cell>-->
+<!--    </ng-container>-->
 
-    <ng-container matColumnDef="tableName">
-      <mat-header-cell *matHeaderCellDef> Наименование таблицы </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.tableName}} </mat-cell>
-    </ng-container>
+<!--    <ng-container matColumnDef="tableName">-->
+<!--      <mat-header-cell *matHeaderCellDef> Наименование таблицы </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element"> {{element.tableName}} </mat-cell>-->
+<!--    </ng-container>-->
 
-    <ng-container matColumnDef="dataCount">
-      <mat-header-cell *matHeaderCellDef> Количество данных </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dataCount}} </mat-cell>
-    </ng-container>
+<!--    <ng-container matColumnDef="dataCount">-->
+<!--      <mat-header-cell *matHeaderCellDef> Количество данных </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element"> {{element.dataCount}} </mat-cell>-->
+<!--    </ng-container>-->
 
-    <ng-container matColumnDef="select">
-      <mat-header-cell *matHeaderCellDef> Выбор </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-checkbox [checked]="element.selected" [disabled]="true"></mat-checkbox>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="bindingNumber">
-      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element?.bindingNumber}} </mat-cell>
-    </ng-container>
+<!--    <ng-container matColumnDef="select">-->
+<!--      <mat-header-cell *matHeaderCellDef> Выбор </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element">-->
+<!--        <mat-checkbox [checked]="element.selected" [disabled]="true"></mat-checkbox>-->
+<!--      </mat-cell>-->
+<!--    </ng-container>-->
+<!--    <ng-container matColumnDef="bindingNumber">-->
+<!--      <mat-header-cell *matHeaderCellDef> </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let element"> {{element?.bindingNumber}} </mat-cell>-->
+<!--    </ng-container>-->
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
+<!--    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+<!--    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>-->
+<!--  </mat-table>-->
 
-  </div>
+<!--  </div>-->
 
-</div>
-  <div *ngIf="!isDataAvailable" class="error-message">
-    <p>No data available. Please adjust your settings.</p>
-  </div>
-  <div *ngIf="migrationStarted" class="error-message">
+<!--</div>-->
+<!--  <div *ngIf="!isDataAvailable" class="error-message">-->
+<!--    <p>No data available. Please adjust your settings.</p>-->
+<!--  </div>-->
+<!--  <div *ngIf="migrationStarted" class="error-message">-->
 
-      <p>{{ migrationMessage }}</p>
+<!--      <p>{{ migrationMessage }}</p>-->
 
-    <button mat-raised-button color="primary" type="button" (click)="cancelMigrate()">Отменить</button>
-    <button mat-raised-button color="primary" type="button" (click)="checkStatus()">Проверить статус</button>
-  </div>
-  <button mat-raised-button color="primary" type="button" [disabled]="!isDataLoaded || !isDataAvailable || migrationStarted" (click)="startMigrate()">Запустить миграцию</button>
+<!--    <button mat-raised-button color="primary" type="button" (click)="cancelMigrate()">Отменить</button>-->
+<!--    <button mat-raised-button color="primary" type="button" (click)="checkStatus()">Проверить статус</button>-->
+<!--  </div>-->
+<!--  <button mat-raised-button color="primary" type="button" [disabled]="!isDataLoaded || !isDataAvailable || migrationStarted" (click)="startMigrate()">Запустить миграцию</button>-->
 
-</form>
+<!--</form>-->
+<mat-card>
+  <mat-card-content>
+    <div class="container">
+      <!-- Блок слева -->
+      <div class="settings">
+        <h2>Заданные настройки</h2>
+        <p><strong>Исходный источник данных:</strong> Имя источника</p>
+        <p>Таблиц: 10, Записей: 1000</p>
+        <p><strong>Итоговый источник данных:</strong> Имя источника</p>
+        <p>Таблиц: 8, Записей: 800</p>
+      </div>
+
+      <!-- Центральный блок -->
+      <div class="migration">
+        <h2>Перейти к правилам трансформации и настройки процесса миграции</h2>
+        <button mat-raised-button (click)="onClick()" color="primary">Перейти</button>
+        <p>Для начала работы с миграцией необходимо задать правила изменения данных, определить тип миграции, и количество таблиц для переноса.</p>
+      </div>
+
+      <!-- Блок справа -->
+      <div class="last-migration">
+        <h2>Последняя миграция</h2>
+        <p>Лог последней миграции...</p>
+        <!-- Добавьте здесь логи последней миграции -->
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

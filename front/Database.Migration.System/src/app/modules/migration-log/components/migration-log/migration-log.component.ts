@@ -35,6 +35,8 @@ export class MigrationLogComponent {
   constructor(private migrationService :MigrationService,) {
   }
   displayedColumns: string[] = ['id', 'startDate', 'endDate', 'sourceDatabase', 'destinationDatabase', 'tableList', 'executionTime', 'migrationStatus'];
+  isMigrationRunning: any = true;
+  currentProgress: number = 76;
   ngOnInit(){
     this.refreshData();
   }

@@ -1,0 +1,10 @@
+mat-card-title {
+  background-color: #eee;
+  padding: 10px;
+  text-align: center;
+}
+
+mat-card-content h2 {
+  color: #333;
+  margin-top: 20px;
+}

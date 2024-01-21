@@ -1,0 +1,25 @@
+.migration-setup {
+  display: flex;
+  justify-content: space-between;
+}
+
+.source-data, .destination-data {
+  width: 48%;
+}
+
+mat-card {
+  margin: 20px 0;
+}
+
+mat-card-title {
+  background-color: #eee;
+  padding: 10px;
+}
+
+button {
+  margin-top: 20px;
+  align-self: center;
+}
+.selected-table {
+  background-color: #e0f7fa;
+}

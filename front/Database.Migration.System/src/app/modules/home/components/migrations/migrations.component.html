@@ -1,0 +1,62 @@
+<div class="migration-setup">
+  <div class="source-data">
+    <!-- Исходный источник данных -->
+    <mat-card>
+      <mat-card-title>Исходный источник данных (MsSql)</mat-card-title>
+      <mat-card-content>
+        <mat-accordion>
+          <!-- Пример с пятью таблицами -->
+          <mat-expansion-panel *ngFor="let table of sourceTables"  [ngClass]="{'selected-table': table.selectedInDestination}">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ table.name }} (Количество данных {{ table.count }})</mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul>
+              <li *ngFor="let field of table.fields">{{ field.name }} - {{ field.type }}</li>
+            </ul>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="destination-data">
+    <!-- Удаленный источник данных -->
+    <mat-card>
+      <mat-card-title>Удаленный источник данных (Postgres)</mat-card-title>
+      <mat-card-content>
+        <mat-accordion>
+          <!-- Пример с пятью таблицами -->
+          <mat-expansion-panel *ngFor="let table of destinationTables">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ table.name }} (Количество данных {{ table.count }})
+                <mat-select [(value)]="table.selectedSourceTable" (selectionChange)="updateSelectedSourceTable($event.value.name, table)" placeholder="Выберите таблицу исходного источника">
+                  <mat-option>Не задано</mat-option>
+                  <mat-option *ngFor="let sourceTable of sourceTables" [value]="sourceTable">{{ sourceTable.name }}</mat-option>
+                </mat-select>
+
+
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul>
+              <li *ngFor="let field of table.fields">
+                {{ field.name }} - {{ field.type }},
+                Значение по умолчанию:
+                <input type="text" [(ngModel)]="field.defaultValue">
+                <mat-select placeholder="Выберите поле исходного источника">
+                  <mat-option>Не задано</mat-option>
+                  <mat-option *ngFor="let sourceField of table.selectedSourceTable?.fields" [value]="sourceField.name">{{ sourceField.name }}</mat-option>
+                </mat-select>
+              </li>
+            </ul>
+
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div>
+  <!-- Кнопка запуска миграции -->
+  <button mat-raised-button color="primary">Запустить миграцию</button>
+</div>

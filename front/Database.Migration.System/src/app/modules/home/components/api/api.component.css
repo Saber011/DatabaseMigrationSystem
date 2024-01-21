@@ -1,0 +1,26 @@
+﻿.api-method {
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #333;
+  margin-top: 20px;
+}
+
+mat-card-title {
+  background-color: #eee;
+  padding: 10px;
+  text-align: center;
+}
+
+mat-card-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+.api-method {
+  margin-bottom: 20px;
+}
+
+h3 {
+  color: #333;
+}

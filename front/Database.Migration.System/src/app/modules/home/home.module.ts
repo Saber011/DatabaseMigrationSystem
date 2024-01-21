@@ -10,9 +10,16 @@ import { HomeComponent } from './components/home/home.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatTableModule} from "@angular/material/table";
+import {ApiComponent} from "./components/api/api.component";
+import {MatAccordion, MatExpansionModule, MatExpansionPanel} from "@angular/material/expansion";;
+import { MigrationsComponent } from './components/migrations/migrations.component'
+import {MatSelectModule} from "@angular/material/select";;
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component'
+;
+import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component'
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, ApiComponent, MigrationsComponent, PrivacyPolicyComponent, TermsOfServiceComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,
@@ -25,6 +32,8 @@ import {MatTableModule} from "@angular/material/table";
     MatGridListModule,
     MatCheckboxModule,
     MatTableModule,
+    MatExpansionModule,
+    MatSelectModule
   ],
 })
 export class HomeModule {}

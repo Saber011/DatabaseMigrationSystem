@@ -13,6 +13,7 @@ import {MatListModule} from "@angular/material/list";
 import {MigrationLogComponent} from "./components/migration-log/migration-log.component";
 import {MigrationLogRoutingModule} from "./migration-log-routing.module";
 import {MatTableModule} from "@angular/material/table";
+import {MatProgressSpinner, MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import {MatTableModule} from "@angular/material/table";
     MatSelectModule,
     MatListModule,
     MatTableModule,
+    MatProgressSpinnerModule
   ],
 })
 export class MigrationLogModule {}
