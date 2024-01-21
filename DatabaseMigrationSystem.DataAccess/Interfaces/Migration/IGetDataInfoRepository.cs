@@ -1,6 +1,8 @@
-﻿namespace DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
+﻿using DatabaseMigrationSystem.DataAccess.Entity;
 
-public interface IGetDataInfoRepository : IGetRepository<int>
+namespace DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
+
+public interface IGetDataInfoRepository : IGetRepository<CollectionInfo[]>
 {
     
 }

@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
 using DatabaseMigrationSystem.Common.Enums;
+using MongoDB.Driver;
 using MySqlConnector;
 using Npgsql;
 using Oracle.ManagedDataAccess.Client;
@@ -11,14 +12,15 @@ public class ConnectionValidator : IConnectionValidator
 {
     public async Task ValidateConnection(DatabaseType databaseType, string connectionString)
     {
-        try
+        if (databaseType == DatabaseType.MongoDb)
+        {
+            var _ = new MongoClient(connectionString);
+                
+        }
+        else
         {
             await using var connection = CreateDbConnection(databaseType, connectionString);
             await connection.OpenAsync();
-        }
-        catch (Exception ex)
-        {
-            throw;
         }
     }
 

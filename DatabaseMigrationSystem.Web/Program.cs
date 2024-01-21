@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using DatabaseMigrationSystem.ApplicationServices;
 using DatabaseMigrationSystem.DataAccess;
 using DatabaseMigrationSystem.Exceptions;
@@ -15,12 +16,15 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddNewtonsoftJson();;
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(opts => opts
+        .SerializerSettings.Converters.Add(new StringEnumConverter()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -40,6 +44,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<Func<ApplicationDbContext>>(s => () => new ApplicationDbContext(dbContextBuilder.Options));
 
 builder.Services.AddAutoMapper(typeof(AccountAutoMapperProfile), typeof(SettingsAutoMapperProfile));
+
+
 
 builder.Services.AddOptions();
 builder.Services.Configure<PostgresSettings>(builder.Configuration.GetSection(nameof(PostgresSettings)));
