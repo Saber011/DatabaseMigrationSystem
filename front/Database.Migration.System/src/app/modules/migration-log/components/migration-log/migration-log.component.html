@@ -20,7 +20,8 @@
           </div>
         </div>
         <div class="migration-actions">
-          <button mat-button color="warn" [disabled]="!isMigrationRunning">Отменить миграцию</button>
+          <button mat-button color="warn" [disabled]="(migration?.migrationStatus!.toString() === 'Finish' || migration?.migrationStatus!.toString() === 'Cancel')">Отменить миграцию</button>
+
           <button (click)="downloadLog(migration?.migrationId)" mat-button>Скачать логи</button>
 
         </div>

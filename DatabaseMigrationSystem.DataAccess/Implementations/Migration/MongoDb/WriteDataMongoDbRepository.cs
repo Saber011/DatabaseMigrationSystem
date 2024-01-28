@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using DatabaseMigrationSystem.Common.Enums;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
@@ -43,9 +44,18 @@ public class WriteDataMongoDbRepository : IWriteDataRepository
                 await collection.InsertManyAsync(documents, cancellationToken: cancellationToken);
             }
             
-            migrationLog.DataCount = batch.Count;
-            migrationLog.Date = DateTime.UtcNow;
-            await WriteLog(migrationLog);
+            var newLog = new MigrationLog
+            {
+                DataCount = batch.Count,
+                Date = DateTime.UtcNow,
+                Schema = migrationLog.Schema,
+                ImportSessionId = migrationLog.ImportSessionId,
+                TableName = migrationLog.TableName,
+                UserId = migrationLog.UserId,
+                Status = MigrationStatus.Processed,
+            };
+
+            await WriteLog(newLog);
         }
         
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Dapper;
+using DatabaseMigrationSystem.Common.Enums;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
 using DatabaseMigrationSystem.Infrastructure.DbContext;
 using DatabaseMigrationSystem.Infrastructure.DbContext.Entities;
@@ -41,9 +42,18 @@ public class WriteDataPostgresSqlRepository : IWriteDataRepository
                 await writer.WriteRowAsync(cancellationToken, rowValues);
             }
 
-            migrationLog.DataCount = dataBatch.Count;
-            migrationLog.Date = DateTime.UtcNow;
-            await WriteLog(migrationLog);
+            var newLog = new MigrationLog
+            {
+                DataCount = dataBatch.Count,
+                Date = DateTime.UtcNow,
+                Schema = migrationLog.Schema,
+                ImportSessionId = migrationLog.ImportSessionId,
+                TableName = migrationLog.TableName,
+                UserId = migrationLog.UserId,
+                Status = MigrationStatus.Processed,
+            };
+
+            await WriteLog(newLog);
         }
         // Завершаем вставку
         await writer.CompleteAsync(cancellationToken);

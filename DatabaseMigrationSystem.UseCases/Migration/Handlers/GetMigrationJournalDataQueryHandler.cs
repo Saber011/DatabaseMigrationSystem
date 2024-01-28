@@ -13,14 +13,12 @@ public class
 {
     private readonly IGetCurrentUserInfoService _getCurrentUserInfoService;
     private readonly IGetUserMigrationDataRepository _getUserMigrationDataRepository;
-    private readonly IGetSettingsRepository _getSettingsRepository;
 
     public GetMigrationJournalDataQueryHandler(IGetCurrentUserInfoService getCurrentUserInfoService, IMapper mapper,
         IGetUserMigrationDataRepository getUserMigrationDataRepository, IGetSettingsRepository getSettingsRepository)
     {
         _getCurrentUserInfoService = getCurrentUserInfoService;
         _getUserMigrationDataRepository = getUserMigrationDataRepository;
-        _getSettingsRepository = getSettingsRepository;
     }
 
     public async Task<List<UserMigrationData>> Handle(GetMigrationJournalDataQuery request,
@@ -28,8 +26,7 @@ public class
     {
         var user = await _getCurrentUserInfoService.Handle(cancellationToken);
         var data = await _getUserMigrationDataRepository.Get((user.Id,0, 100), cancellationToken);
-        var settings = await _getSettingsRepository.Get(user.Id, cancellationToken);
-        
-        return data;
+
+        return data.OrderByDescending(x => x.Date).ToList();
     }
 }

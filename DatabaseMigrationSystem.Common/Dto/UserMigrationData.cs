@@ -10,4 +10,6 @@ public class UserMigrationData
     public TimeSpan MigrationDuration { get; set; }
     public Guid MigrationId { get; set; }
     public double MigrationProgressPercentage { get; set; }
+    
+    public DateTime Date { get; set; }
 }

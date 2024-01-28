@@ -46,7 +46,6 @@ export class MigrationLogComponent implements OnInit {
       return;
     }
 
-    // Устанавливаем заголовки запроса, если они требуются для вашего API
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       // Добавьте другие заголовки, если они нужны

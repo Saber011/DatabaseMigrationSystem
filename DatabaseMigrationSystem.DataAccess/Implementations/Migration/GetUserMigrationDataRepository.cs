@@ -61,7 +61,8 @@ public class GetUserMigrationDataRepository : IGetUserMigrationDataRepository
                 MigrationStatus = latestLog?.Status ?? MigrationStatus.Start,
                 MigrationDuration = latestLog != null && startLog != null ? latestLog.Date - startLog.Date : TimeSpan.Zero,
                 MigrationId = migrationId,
-                MigrationProgressPercentage = startLog != null ? (double)processedLogsCount / startLog.DataCount * 100 : 0
+                MigrationProgressPercentage = startLog != null ? (double)processedLogsCount / startLog.DataCount * 100 : 0,
+                Date = latestLog?.Date ?? DateTime.Now,
             };
 
             result.Add(migrationData);
