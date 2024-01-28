@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { CurrentMigrationSettingsDto } from '../models/current-migration-settings-dto';
+import { ExportLogCommand } from '../models/export-log-command';
 import { MigrateTableCommand } from '../models/migrate-table-command';
 import { MigrationStatusDto } from '../models/migration-status-dto';
 import { TableInfosDto } from '../models/table-infos-dto';
@@ -432,6 +433,67 @@ export class MigrationService extends BaseService {
 
     return this.apiMigrationGetCurrentMigrationSettingsGet$Response(params,context).pipe(
       map((r: StrictHttpResponse<CurrentMigrationSettingsDto>) => r.body as CurrentMigrationSettingsDto)
+    );
+  }
+
+  /**
+   * Path part for operation apiMigrationExportLogPost
+   */
+  static readonly ApiMigrationExportLogPostPath = '/api/Migration/ExportLog';
+
+  /**
+   * Получить логи миграции.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiMigrationExportLogPost()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiMigrationExportLogPost$Response(params?: {
+    body?: ExportLogCommand
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, MigrationService.ApiMigrationExportLogPostPath, 'post');
+    if (params) {
+      rb.body(params.body, 'application/*+json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * Получить логи миграции.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiMigrationExportLogPost$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiMigrationExportLogPost(params?: {
+    body?: ExportLogCommand
+  },
+  context?: HttpContext
+
+): Observable<void> {
+
+    return this.apiMigrationExportLogPost$Response(params,context).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

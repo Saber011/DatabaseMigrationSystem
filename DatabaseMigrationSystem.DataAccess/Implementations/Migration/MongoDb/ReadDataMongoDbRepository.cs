@@ -1,42 +1,42 @@
-﻿using System.Collections.Concurrent;
-using Dapper;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using System.Collections.Concurrent;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
-using MySqlConnector;
-
-namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.MongoDb;
+using DatabaseMigrationSystem.Infrastructure.DbContext;
 
 public class ReadDataMongoDbRepository : ReadDataRepository
 {
-    private readonly string _connectionString;
+    private readonly IMongoDatabase _database;
 
     public ReadDataMongoDbRepository(string connectionString)
     {
-        _connectionString = connectionString;
+        var client = new MongoClient(connectionString);
+        var mongoUrl = MongoUrl.Create(connectionString);
+        _database = client.GetDatabase(mongoUrl.DatabaseName);
     }
-    
+
     public override async Task ReadDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue)
     {
-        await using var connection = new MySqlConnection(_connectionString);
-        await connection.OpenAsync();
+        var collection = _database.GetCollection<BsonDocument>(table);
 
-        var offset = 0;
-        while (true)
+        using (var cursor = await collection.FindAsync(new BsonDocument()))
         {
-            var data = await connection.QueryAsync<dynamic>($@"
-                    SELECT *
-                    FROM {schema}.{table}
-                    ORDER BY NULL
-                    LIMIT {offset}, {BatchSize}");
+            while (await cursor.MoveNextAsync())
+            {
+                var batch = cursor.Current;
+                var dataList = new List<dynamic>();
 
-            var dataList = data.ToList();
-            if (dataList.Count > 0)
-            {
-                dataQueue.Add(dataList);
-                offset += BatchSize;
-            }
-            else
-            {
-                break;
+                foreach (var document in batch)
+                {
+                    // Преобразуем BsonDocument в динамический объект
+                    var dynamicObject = BsonTypeMapper.MapToDotNetValue(document);
+                    dataList.Add(dynamicObject);
+                }
+
+                if (dataList.Count > 0)
+                {
+                    dataQueue.Add(dataList);
+                }
             }
         }
 

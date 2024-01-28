@@ -37,7 +37,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, A
             
         var refreshToken = userToken.Single(x => x.Token == request.Token);
 
-        if (refreshToken.Expires - DateTime.Now > TimeSpan.FromMinutes(5))
+        if (refreshToken.Expires - DateTime.UtcNow > TimeSpan.FromMinutes(5))
         {
             return new AuthenticateInfo
             {

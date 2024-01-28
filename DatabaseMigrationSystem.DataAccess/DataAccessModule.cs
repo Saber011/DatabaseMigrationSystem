@@ -41,5 +41,9 @@ public class DataAccessModule : ApplicationModule
         services.AddScoped<IGetMigrationLogRepository, GetMigrationLogRepository>();
         services.AddScoped<IGetUserMigrationDataRepository, GetUserMigrationDataRepository>();
         services.AddScoped<IGetDataInfoRepositoryFactory, GetDataInfoRepositoryFactory>();
+        
+        
+        services.AddScoped<IGetMigrationLogsRepository, GetMigrationLogsRepository>();
+        
     }
 }

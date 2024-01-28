@@ -2,6 +2,8 @@
 using System.Data;
 using Dapper;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
+using DatabaseMigrationSystem.Infrastructure.DbContext;
+using DatabaseMigrationSystem.Infrastructure.DbContext.Entities;
 using Oracle.ManagedDataAccess.Client;
 
 namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.Oracle;
@@ -9,16 +11,18 @@ namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.Oracle;
 public class WriteDataOracleRepository : IWriteDataRepository
 {
     private readonly string _connectionString;
+    private readonly Func<ApplicationDbContext> _contextFactory;
 
-    public WriteDataOracleRepository(string connectionString)
+    public WriteDataOracleRepository(string connectionString, Func<ApplicationDbContext> contextFactory)
     {
         _connectionString = connectionString;
+        _contextFactory = contextFactory;
     }
 
-    public async Task WriteDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue)
+    public async Task WriteDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue, MigrationLog migrationLog,  CancellationToken cancellationToken)
     {
         await using var destinationConnection = new OracleConnection(_connectionString);
-        await destinationConnection.OpenAsync();
+        await destinationConnection.OpenAsync(cancellationToken);
 
         // Получаем информацию о столбцах таблицы
         var columns = await GetColumnsInfo(destinationConnection, schema, table);
@@ -37,6 +41,10 @@ public class WriteDataOracleRepository : IWriteDataRepository
         {
             using var dataTable = ToDataTable(dataBatch, columns);
             bulkCopy.WriteToServer(dataTable);
+            
+            migrationLog.DataCount = dataBatch.Count;
+            migrationLog.Date = DateTime.UtcNow;
+            await WriteLog(migrationLog);
         }
     }
 
@@ -94,5 +102,15 @@ private DataTable ToDataTable(IEnumerable<dynamic> data, IList<(string ColumnNam
     }
 
     return dataTable;
+}
+
+
+private async Task WriteLog(MigrationLog log)
+{
+    var context = _contextFactory();
+
+    context.MigrationLog.Add(log);
+
+    await context.SaveChangesAsync();
 }
 }

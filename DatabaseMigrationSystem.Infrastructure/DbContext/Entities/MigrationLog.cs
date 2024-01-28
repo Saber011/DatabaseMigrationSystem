@@ -1,4 +1,5 @@
-﻿using DatabaseMigrationSystem.Common.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using DatabaseMigrationSystem.Common.Enums;
 
 namespace DatabaseMigrationSystem.Infrastructure.DbContext.Entities;
 
@@ -22,11 +23,15 @@ public class MigrationLog
     /// <summary>
     /// 
     /// </summary>
-    public int DataCount { get; set; }
+    public long DataCount { get; set; }
     
     public MigrationStatus Status { get; set; }
     
     public DateTime Date { get; set; }
     
     public int UserId { get; set; }
+    
+    public Guid ImportSessionId { get; set; }
+    
+    public string Exception { get; set; }
 }

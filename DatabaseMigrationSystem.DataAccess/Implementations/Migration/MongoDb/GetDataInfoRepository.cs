@@ -7,42 +7,37 @@ namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.MongoDb;
 
 public class GetDataInfoMongoDbRepository : IGetDataInfoRepository
 {
-    private readonly string _connectionString;
     private readonly IMongoClient _client;
+    private readonly string _database;
 
     public GetDataInfoMongoDbRepository(string connectionString)
     {
         _client = new MongoClient(connectionString);
-        _connectionString = connectionString;
+        var mongoUrl = new MongoUrl(connectionString);
+        _database = mongoUrl.DatabaseName;
     }
     
     public async Task<CollectionInfo[]> Get(CancellationToken cancellationToken)
     {
-        
-        var databases = await _client.ListDatabasesAsync(cancellationToken).Result.ToListAsync(cancellationToken: cancellationToken);
         var collectionInfoList = new List<CollectionInfo>();
-        foreach (var db in databases
-                     .Select(database => database["name"].AsString)
-                     .Select(dbName => _client.GetDatabase(dbName)))
+        var db= _client.GetDatabase(_database);
+        var collections = await db.ListCollectionsAsync(cancellationToken: cancellationToken);
+        var collectionNames = await collections.ToListAsync(cancellationToken);
+
+        foreach (var collection in collectionNames)
         {
-            var collections = await db.ListCollectionsAsync(cancellationToken: cancellationToken);
-            var collectionNames = await collections.ToListAsync(cancellationToken);
+            var collectionName = collection["name"].AsString;
+            var mongoCollection = db.GetCollection<BsonDocument>(collectionName);
 
-            foreach (var collection in collectionNames)
+            // Получение количества документов в коллекции
+            var documentCount =
+                await mongoCollection.CountDocumentsAsync(new BsonDocument(), cancellationToken: cancellationToken);
+
+            collectionInfoList.Add(new CollectionInfo
             {
-                var collectionName = collection["name"].AsString;
-                var mongoCollection = db.GetCollection<BsonDocument>(collectionName);
-
-                // Получение количества документов в коллекции
-                var documentCount =
-                    await mongoCollection.CountDocumentsAsync(new BsonDocument(), cancellationToken: cancellationToken);
-
-                collectionInfoList.Add(new CollectionInfo
-                {
-                    CollectionName = collectionName,
-                    DocumentCount = documentCount
-                });
-            }
+                CollectionName = collectionName,
+                DocumentCount = documentCount
+            });
         }
 
         return collectionInfoList.ToArray();

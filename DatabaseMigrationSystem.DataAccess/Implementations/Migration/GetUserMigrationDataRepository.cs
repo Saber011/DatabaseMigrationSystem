@@ -15,50 +15,58 @@ public class GetUserMigrationDataRepository : IGetUserMigrationDataRepository
         _contextFactory = contextFactory;
     }
     
-    public async Task<List<UserMigrationData>> Get(int request, CancellationToken cancellationToken)
+    public async Task<List<UserMigrationData>> Get((int userId, int page, int pageSize) request, CancellationToken cancellationToken)
     {
         await using var context = _contextFactory();
+        var userId = request.userId;
+        var page = request.page;
+        var pageSize = request.pageSize;
 
-        var migrationLogs = await context.MigrationLog
-            .Where(log => log.UserId == request)
-            .OrderBy(log => log.Date)
-            .ThenBy(log => log.TableName)
-            .ToListAsync(cancellationToken: cancellationToken);
+        // Получаем уникальные идентификаторы миграций (CorrectId) для пользователя
+        var uniqueMigrationIds = await context.MigrationLog
+            .Where(log => log.UserId == userId)
+            .Select(log => log.ImportSessionId)
+            .Distinct()
+            .OrderByDescending(id => id) // Сортировка по убыванию для получения последних миграций
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
 
-        var migrationData = new List<UserMigrationData>();
-        UserMigrationData currentMigration = null;
+        var result = new List<UserMigrationData>();
 
-        foreach (var log in migrationLogs)
+        // Для каждого идентификатора миграции получаем данные
+        foreach (var migrationId in uniqueMigrationIds)
         {
-            switch (log.Status)
-            {
-                case MigrationStatus.Start: // Начало новой миграции
-                    currentMigration = new UserMigrationData
-                    {
-                        Id = log.Id,
-                        StartDate = log.Date,
-                        TableList = log.TableName,
-                        MigrationStatus = log.Status,
-                    };
-                    migrationData.Add(currentMigration);
-                    break;
-                case MigrationStatus.Processed: // Обновление текущей миграции
-                    if (currentMigration != null) currentMigration.MigrationStatus = log.Status;
-                    break;
-                case MigrationStatus.Finish:
-                case MigrationStatus.Cancel: // Завершение текущей миграции
-                    if (currentMigration != null)
-                    {
-                        currentMigration.EndDate = log.Date;
-                        currentMigration.ExecutionTime = currentMigration.EndDate - currentMigration.StartDate;
-                        currentMigration.MigrationStatus = log.Status;
-                    }
+            // Начальная запись миграции
+            var startLog = await context.MigrationLog
+                .Where(log => log.UserId == userId && log.ImportSessionId == migrationId && log.Status == (int)MigrationStatus.Start)
+                .OrderBy(log => log.Date)
+                .FirstOrDefaultAsync(cancellationToken);
 
-                    currentMigration = null; // Переход к следующей миграции
-                    break;
-            }
+            // Последняя запись миграции
+            var latestLog = await context.MigrationLog
+                .Where(log => log.UserId == userId && log.ImportSessionId == migrationId)
+                .OrderByDescending(log => log.Date)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            // Суммарное количество обработанных записей
+            var processedLogsCount = await context.MigrationLog
+                .Where(log => log.UserId == userId && log.ImportSessionId == migrationId && log.Status == MigrationStatus.Processed)
+                .SumAsync(log => log.DataCount, cancellationToken);
+
+            var migrationData = new UserMigrationData
+            {
+                TotalRecordsForMigration = startLog?.DataCount ?? 0,
+                CurrentRecordsCount = processedLogsCount,
+                MigrationStatus = latestLog?.Status ?? MigrationStatus.Start,
+                MigrationDuration = latestLog != null && startLog != null ? latestLog.Date - startLog.Date : TimeSpan.Zero,
+                MigrationId = migrationId,
+                MigrationProgressPercentage = startLog != null ? (double)processedLogsCount / startLog.DataCount * 100 : 0
+            };
+
+            result.Add(migrationData);
         }
 
-        return migrationData;
+        return result;
     }
 }

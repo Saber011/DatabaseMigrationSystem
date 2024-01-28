@@ -27,14 +27,9 @@ public class
         CancellationToken cancellationToken)
     {
         var user = await _getCurrentUserInfoService.Handle(cancellationToken);
-        var data = await _getUserMigrationDataRepository.Get(user.Id, cancellationToken);
+        var data = await _getUserMigrationDataRepository.Get((user.Id,0, 100), cancellationToken);
         var settings = await _getSettingsRepository.Get(user.Id, cancellationToken);
-
-        foreach (var item in data)
-        {
-            item.DestinationDatabase = settings.DestinationDatabaseType.ToString();
-            item.SourceDatabase = settings.SourceDatabaseType.ToString();
-        }
+        
         return data;
     }
 }

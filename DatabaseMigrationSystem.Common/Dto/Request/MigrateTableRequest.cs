@@ -9,4 +9,9 @@ public class MigrateTableRequest
     public string DestinationTable { get; set; }
     
     public string DestinationSchema { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public ColumnMapping[] ColumnsMapping { get; set; }
 }

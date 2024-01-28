@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using Dapper;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
+using DatabaseMigrationSystem.Infrastructure.DbContext;
+using DatabaseMigrationSystem.Infrastructure.DbContext.Entities;
 using Npgsql;
 
 namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.PostgresSql;
@@ -8,16 +10,18 @@ namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.PostgresS
 public class WriteDataPostgresSqlRepository : IWriteDataRepository
 {
     private readonly string _connectionString;
+    private readonly Func<ApplicationDbContext> _contextFactory;
 
-    public WriteDataPostgresSqlRepository(string connectionString)
+    public WriteDataPostgresSqlRepository(string connectionString, Func<ApplicationDbContext> contextFactory)
     {
         _connectionString = connectionString;
+        _contextFactory = contextFactory;
     }
     
-    public async Task WriteDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue)
+    public async Task WriteDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue, MigrationLog migrationLog,  CancellationToken cancellationToken)
     {
         await using var connection = new NpgsqlConnection(_connectionString);
-        await connection.OpenAsync();
+        await connection.OpenAsync(cancellationToken);
 
         // Получаем информацию о столбцах таблицы
         var columns = await GetColumnsInfo(connection, schema, table);
@@ -34,11 +38,15 @@ public class WriteDataPostgresSqlRepository : IWriteDataRepository
             foreach (var dataRow in (dataBatch.Select(x => (IDictionary<string, object>)x)))
             {
                 var rowValues = columns.Select(column => dataRow.FirstOrDefault(x => x.Key.ToLower() == column.ColumnName.ToLower()).Value ?? DBNull.Value).ToArray();
-                writer.WriteRow(rowValues);
+                await writer.WriteRowAsync(cancellationToken, rowValues);
             }
+
+            migrationLog.DataCount = dataBatch.Count;
+            migrationLog.Date = DateTime.UtcNow;
+            await WriteLog(migrationLog);
         }
         // Завершаем вставку
-        await writer.CompleteAsync();
+        await writer.CompleteAsync(cancellationToken);
     }
     
 private async Task<IList<(string ColumnName, Type ColumnType)>> GetColumnsInfo(NpgsqlConnection connection, string schema, string table)
@@ -51,6 +59,15 @@ private async Task<IList<(string ColumnName, Type ColumnType)>> GetColumnsInfo(N
 
     var columns = columnsData.Select(columnData => (columnData.ColumnName, ColumnType: GetClrType(columnData.DataType))).ToList();
     return columns;
+}
+
+private async Task WriteLog(MigrationLog log)
+{
+    var context = _contextFactory();
+
+    context.MigrationLog.Add(log);
+
+    await context.SaveChangesAsync();
 }
 
 private Type GetClrType(string sqlType)

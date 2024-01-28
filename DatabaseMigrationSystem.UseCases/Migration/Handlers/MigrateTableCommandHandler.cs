@@ -41,7 +41,7 @@ public class MigrateTableCommandHandler: IRequestHandler<MigrateTableCommand>
                 UserId = user.Id
             };
 
-            _dataMigratorService.Handle(dataMigrateRequest, cancellationToken).FireAndForget();;
+            await _dataMigratorService.Handle(dataMigrateRequest, cancellationToken);
         }
 
         return default;

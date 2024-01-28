@@ -1,28 +1,61 @@
-﻿/*.container {*/
-/*  padding: 20px;*/
-/*}*/
-
-/*mat-form-field {*/
-/*  width: 100%;*/
-/*}*/
-
-/*mat-table {*/
-/*  width: 100%;*/
-/*}*/
-
-/*mat-header-cell, mat-cell {*/
-/*  padding: 10px;*/
-/*  border-bottom: 1px solid #dddddd;*/
-/*}*/
-
-/*mat-header-cell {*/
-/*  background-color: #535b63;*/
-/*  color: #ffffff;*/
-/*}*/
-
-.migration-progress-container {
+﻿h2 {
+  text-align: center;
+  color: #4d4d4d;
+  font-size: 24px;
+  padding: 15px 0 15px 0;
+}
+.migration-container {
+  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
+}
+
+.migration-card {
+  width: 100%;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-content {
+  display: flex;
+  width: 100%;
+  min-height: 300px;
+  align-items: center;
+}
+
+.progress-spinner-container {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px; /* Отступ между спиннером и информацией */
+}
+
+.migration-info {
+  flex-grow: 1;
+  text-align: left; /* Выравнивание текста по левому краю */
+}
+
+.migration-actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 20px;
+}
+
+.mat-paginator {
+  width: 100%;
+  margin-top: 30px;
+
+}
+
+.content-container {
+  margin-bottom: 100px; /* Достаточно места для футера */
 }
 
 .progress-spinner-container {
@@ -30,28 +63,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 25%;
 }
 
 .progress-percentage {
-  position: absolute;
-  font-size: 24px;
-  font-weight: bold;
+  position: absolute; /* Размещаем текст абсолютно внутри спиннера */
+  font-size: 20px; /* Размер шрифта для процента */
+  color: #000; /* Цвет текста */
 }
 
-.migration-info {
-  margin-left: 20px;
+
+.page-with-paginator {
+  padding-bottom: 100px; /* Добавьте достаточно места для футера */
 }
 
-.migration-actions {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-around;
-}
-
- h2 {
-  text-align: center;
-  color: #4d4d4d;
-  font-size: 24px;
-  padding: 15px 0 15px 0;
+.page-with-paginator .paginator-container {
+  margin-bottom: 100px;
 }

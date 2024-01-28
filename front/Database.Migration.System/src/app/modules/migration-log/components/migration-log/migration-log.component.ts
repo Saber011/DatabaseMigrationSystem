@@ -1,57 +1,76 @@
-﻿import {Component, ViewChild} from '@angular/core';
-import {MatSort} from "@angular/material/sort";
-import {MatTableDataSource} from "@angular/material/table";
-import {TableInfoDto} from "../../../../api/models/table-info-dto";
-import {MigrationService} from "../../../../api/services/migration.service";
-import {UserMigrationData} from "../../../../api/models/user-migration-data";
-import {MatPaginator} from "@angular/material/paginator";
-
-export interface Migration {
-  id: number;
-  startDate: string;
-  endDate: string;
-  sourceDb: string;
-  remoteDb: string;
-  tablesList: string;
-  totalExecutionTime: string;
-  migrationStatus: string;
-}
-
-const MIGRATION_DATA: Migration[] = [
-  {id: 1, startDate: '2023-06-01 12:00:00', endDate: '2023-06-01 12:30:00', sourceDb: 'Исходная БД', remoteDb: 'Удаленная БД', tablesList: 'Table1, Table2', totalExecutionTime: '30 минут', migrationStatus: 'Успешно'},
-  {id: 2, startDate: '2023-06-02 10:00:00', endDate: '2023-06-02 11:30:00', sourceDb: 'Исходная БД', remoteDb: 'Удаленная БД', tablesList: 'Table3, Table4', totalExecutionTime: '90 минут', migrationStatus: 'Ошибка'}
-];
+﻿import { Component, ViewChild, OnInit } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MigrationService } from '../../../../api/services/migration.service';
+import { UserMigrationData } from '../../../../api/models/user-migration-data';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Component({
   selector: 'app-migration-log',
   templateUrl: './migration-log.component.html',
   styleUrls: ['./migration-log.component.css']
 })
-export class MigrationLogComponent {
-  @ViewChild(MatSort) sort!: MatSort;
+export class MigrationLogComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  dataSource!: MatTableDataSource<UserMigrationData>;
 
-  constructor(private migrationService :MigrationService,) {
-  }
-  displayedColumns: string[] = ['id', 'startDate', 'endDate', 'sourceDatabase', 'destinationDatabase', 'tableList', 'executionTime', 'migrationStatus'];
-  isMigrationRunning: any = true;
-  currentProgress: number = 76;
-  ngOnInit(){
+  migrationData: UserMigrationData[] = [];
+  pagedData: UserMigrationData[] = [];
+  isMigrationRunning: boolean = true;
+
+  constructor(private http: HttpClient, private migrationService: MigrationService) {}
+
+  ngOnInit() {
     this.refreshData();
   }
 
   private refreshData() {
-    this.migrationService.apiMigrationGetMigrationJournalDataGet()
-      .subscribe(value => {
-          this.dataSource = new MatTableDataSource(value);
-          this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      });
+    this.migrationService.apiMigrationGetMigrationJournalDataGet().subscribe(data => {
+      this.migrationData = data;
+      this.updatePagedData();
+    });
+
   }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  updatePagedData() {
+    const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+    const endIndex = startIndex + this.paginator.pageSize;
+    this.pagedData = this.migrationData.slice(startIndex, endIndex);
+  }
+
+  ngAfterViewInit() {
+    this.paginator.page.subscribe(() => this.updatePagedData());
+  }
+
+  downloadLog(migrationId: string | undefined) {
+    if (!migrationId) {
+      console.error('ID миграции не определен');
+      return;
+    }
+
+    // Устанавливаем заголовки запроса, если они требуются для вашего API
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      // Добавьте другие заголовки, если они нужны
+    });
+
+    // Определяем URL для запроса
+    const url = `${this.migrationService.rootUrl}/api/Migration/ExportLog`;
+
+    // Выполняем запрос с responseType: 'blob'
+    this.http.post(url, { id: migrationId }, { headers: headers, responseType: 'blob' }).subscribe(blob => {
+      // Создаем URL из полученного Blob
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      // Создаем временный элемент <a> для скачивания файла
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `migration-log-${migrationId}.xlsx`; // Устанавливаем имя файла
+      link.click(); // Программно кликаем по ссылке для скачивания
+
+      // Очищаем URL после скачивания
+      window.URL.revokeObjectURL(downloadUrl);
+    }, error => {
+      console.error('Ошибка при скачивании лога миграции:', error);
+    });
   }
 
 }

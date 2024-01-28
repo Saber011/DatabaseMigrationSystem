@@ -23,3 +23,6 @@ button {
 .selected-table {
   background-color: #e0f7fa;
 }
+.example-margin {
+  margin: 0 10px;
+}

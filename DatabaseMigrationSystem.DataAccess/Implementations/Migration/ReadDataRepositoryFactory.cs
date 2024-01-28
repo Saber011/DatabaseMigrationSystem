@@ -17,6 +17,7 @@ public class ReadDataRepositoryFactory : IReadDataRepositoryFactory
             DatabaseType.PostgresSql => new ReadDataPostgresSqlRepository(connectionString),
             DatabaseType.SqlServer => new ReadDataSqlServerRepository(connectionString),
             DatabaseType.MySQl => new ReadDataMySqlRepository(connectionString),
+            DatabaseType.MongoDb => new ReadDataMongoDbRepository(connectionString),
             _ => throw new NotSupportedException($"Service of type {type} is not supported.")
         };
     }

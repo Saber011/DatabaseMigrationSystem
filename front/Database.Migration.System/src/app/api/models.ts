@@ -1,9 +1,12 @@
 export { AuthenticateCommand } from './models/authenticate-command';
 export { AuthenticateInfo } from './models/authenticate-info';
 export { BrokenRule } from './models/broken-rule';
+export { ColumnMapping } from './models/column-mapping';
 export { CurrentMigrationSettingsDto } from './models/current-migration-settings-dto';
 export { DatabaseType } from './models/database-type';
 export { DeleteUserCommand } from './models/delete-user-command';
+export { ExportLogCommand } from './models/export-log-command';
+export { FieldDto } from './models/field-dto';
 export { GetUsersQuery } from './models/get-users-query';
 export { MigrateTableCommand } from './models/migrate-table-command';
 export { MigrateTableRequest } from './models/migrate-table-request';

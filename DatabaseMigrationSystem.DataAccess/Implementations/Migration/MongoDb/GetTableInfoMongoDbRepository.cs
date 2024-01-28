@@ -1,47 +1,58 @@
-﻿using Dapper;
-using DatabaseMigrationSystem.DataAccess.Entity;
+﻿using DatabaseMigrationSystem.DataAccess.Entity;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MySqlConnector;
+using System.Linq;
 
 namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.MongoDb;
 
 public class GetTableInfoMongoDbRepository: IGetTableInfoRepository
 {
-    private readonly string _connectionString;
+    private readonly string _database;
     private readonly IMongoClient _client;
 
     public GetTableInfoMongoDbRepository(string connectionString)
     {
         _client = new MongoClient(connectionString);
-        _connectionString = connectionString;
+        var mongoUrl = new MongoUrl(connectionString);
+        _database = mongoUrl.DatabaseName;
     }
     
     public async Task<List<TableInfo>> Get(CancellationToken cancellationToken)
     {
-        var database = _client.GetDatabase(_connectionString);
-        var collections = await database.ListCollectionsAsync(cancellationToken: cancellationToken);
+        var tableInfoList = new List<TableInfo>();
+        var database = _client.GetDatabase(_database);
+        var collections = await database.ListCollectionNamesAsync(cancellationToken: cancellationToken);
         var collectionNames = await collections.ToListAsync(cancellationToken);
 
-        var collectionInfoList = new List<CollectionInfo>();
-
-        foreach (var collection in collectionNames)
+        foreach (var collectionName in collectionNames)
         {
-            var collectionName = collection["name"].AsString;
             var mongoCollection = database.GetCollection<BsonDocument>(collectionName);
 
-            // Получение количества документов в коллекции
-            var documentCount = await mongoCollection.CountDocumentsAsync(new BsonDocument(), cancellationToken: cancellationToken);
+            // Получение документа с максимальным количеством полей
+            var documentWithMaxFields = await mongoCollection.Find(new BsonDocument())
+                                                             .Sort("{ $natural: -1 }")
+                                                             .Limit(1)
+                                                             .FirstOrDefaultAsync(cancellationToken);
 
-            collectionInfoList.Add(new CollectionInfo
+            if (documentWithMaxFields != null)
             {
-                CollectionName = collectionName,
-                DocumentCount = documentCount
-            });
+                var columnNames = documentWithMaxFields.Names.ToList();
+                var documentCount =
+                    await mongoCollection.CountDocumentsAsync(new BsonDocument(), cancellationToken: cancellationToken);
+
+                // Создание списка ColumnInfo
+                var columns = columnNames.Select(name => new ColumnInfo { ColumnName = name }).ToList();
+
+                tableInfoList.Add(new TableInfo
+                {
+                    TableName = collectionName,
+                    Columns = columns,
+                    RowCount = documentCount
+                });
+            }
         }
 
-        return new List<TableInfo>();
+        return tableInfoList;
     }
 }
-

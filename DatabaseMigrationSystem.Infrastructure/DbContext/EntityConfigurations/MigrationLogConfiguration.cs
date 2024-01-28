@@ -23,5 +23,14 @@ public class MigrationLogConfiguration : IEntityTypeConfiguration<MigrationLog>
         builder.Property(x => x.TableName)
             .HasColumnName("tableName")
             .HasComment("Наименование таблицы");
+
+        builder.Property(x => x.ImportSessionId)
+            .HasColumnName("CorrectId")
+            .HasColumnType("uuid")
+            .HasComment("Уникальный идентификатор сессии импорта");
+        
+        builder.Property(x => x.Exception)
+            .HasColumnName("exception")
+            .HasComment("Исключение");
     }
 }

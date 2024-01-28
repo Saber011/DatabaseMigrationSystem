@@ -1,17 +1,17 @@
 <div class="migration-setup">
+
   <div class="source-data">
     <!-- Исходный источник данных -->
     <mat-card>
-      <mat-card-title>Исходный источник данных (MsSql)</mat-card-title>
+      <mat-card-title>Исходный источник данных </mat-card-title>
       <mat-card-content>
         <mat-accordion>
-          <!-- Пример с пятью таблицами -->
           <mat-expansion-panel *ngFor="let table of sourceTables"  [ngClass]="{'selected-table': table.selectedInDestination}">
             <mat-expansion-panel-header>
               <mat-panel-title>{{ table.name }} (Количество данных {{ table.count }})</mat-panel-title>
             </mat-expansion-panel-header>
             <ul>
-              <li *ngFor="let field of table.fields">{{ field.name }} - {{ field.type }}</li>
+              <li *ngFor="let field of table.fields">{{ field.name }} - {{  field.type ?  field.type: 'string'}}</li>
             </ul>
           </mat-expansion-panel>
         </mat-accordion>
@@ -22,7 +22,7 @@
   <div class="destination-data">
     <!-- Удаленный источник данных -->
     <mat-card>
-      <mat-card-title>Удаленный источник данных (Postgres)</mat-card-title>
+      <mat-card-title>Удаленный источник данных</mat-card-title>
       <mat-card-content>
         <mat-accordion>
           <!-- Пример с пятью таблицами -->
@@ -40,7 +40,7 @@
             </mat-expansion-panel-header>
             <ul>
               <li *ngFor="let field of table.fields">
-                {{ field.name }} - {{ field.type }},
+                {{ field.name }} - {{  field.type ?  field.type: 'string'}},
                 Значение по умолчанию:
                 <input type="text" [(ngModel)]="field.defaultValue">
                 <mat-select placeholder="Выберите поле исходного источника">
@@ -56,7 +56,11 @@
     </mat-card>
   </div>
 </div>
-<div>
+<div *ngIf="!this.migrationStarted">
   <!-- Кнопка запуска миграции -->
-  <button mat-raised-button color="primary">Запустить миграцию</button>
+  <button (click)="startMigrate()"  mat-raised-button color="primary">Запустить миграцию</button>
+</div>
+<div *ngIf="this.migrationStarted">
+  <!-- Кнопка запуска миграции -->
+  <button (click)="cancelMigrate()"  mat-raised-button color="red">Отменить миграцию</button>
 </div>

@@ -19,4 +19,9 @@ public sealed class TableInfoDto
     /// 
     /// </summary>
     public int DataCount { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public FieldDto[] Fields { get; set; }
 }

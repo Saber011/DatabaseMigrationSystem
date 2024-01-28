@@ -2,7 +2,7 @@
 
 namespace DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
 
-public interface IGetUserMigrationDataRepository : IGetRepository<int, List<UserMigrationData>>
+public interface IGetUserMigrationDataRepository : IGetRepository<(int userId, int page, int pageSize), List<UserMigrationData>>
 {
     
 }

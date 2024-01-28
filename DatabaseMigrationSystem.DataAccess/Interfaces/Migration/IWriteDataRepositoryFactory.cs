@@ -9,5 +9,6 @@ public interface IWriteDataRepositoryFactory
     /// </summary>
     /// <param name="type"></param>
     /// <param name="connectionString"></param>
-    public IWriteDataRepository Create(DatabaseType type, string connectionString);
+    /// <param name="withBinarySerializable"></param>
+    public IWriteDataRepository Create(DatabaseType type, string connectionString, bool withBinarySerializable = false);
 }

@@ -91,7 +91,7 @@
   <mat-card-content>
     <div class="container">
       <!-- Блок слева -->
-      <div class="settings">
+      <div class="settings" *ngIf="sourceType as value; else unset">
         <h2>Заданные настройки</h2>
         <p><strong>Исходный источник данных:</strong> {{sourceType}}</p>
         <p>{{migrationMessage}}</p>
@@ -110,8 +110,17 @@
       <div class="last-migration">
         <h2>Последняя миграция</h2>
         <p>Лог последней миграции...</p>
-        <!-- Добавьте здесь логи последней миграции -->
       </div>
     </div>
   </mat-card-content>
 </mat-card>
+
+
+<ng-template #unset>
+  <div class="settings">
+    <h2>Источники не были указаны, необходимо произвести настройку!</h2>
+    <p><strong>Для указания настроек перейдите в раздел :</strong>
+    <a href="/settings">настройки</a>
+    </p>
+</div>
+</ng-template>

@@ -8,5 +8,7 @@ public sealed class TableInfo
     public string ParentTableName { get; set; }
     public List<string> ChildTables { get; set; } = new List<string>();
     
-    public int RowCount { get; set; }
+    public long RowCount { get; set; }
+    
+    public List<ColumnInfo> Columns { get; set; }
 }

@@ -127,4 +127,26 @@ public class MigrationController : ControllerBase
     {
         return await _mediator.Send(new GetCurrentMigrationSettingsQuery(), cancellationToken);
     }
+    
+    
+    /// <summary>
+    /// Получить логи миграции
+    /// </summary>
+    /// <response code = "200" > Успешное выполнение.</response>
+    /// <response code = "500" > Непредвиденная ошибка сервера.</response>
+    [HttpPost]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(IList<BrokenRule>),400)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> ExportLog(ExportLogCommand command, CancellationToken cancellationToken)
+    {
+        var content = await _mediator.Send(command, cancellationToken);
+        
+        var fileName = "MigrationLogs.xlsx";
+
+        // Установка MIME типа для файла Excel
+        var mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
+        return File(content, mimeType, fileName);
+    }
 }

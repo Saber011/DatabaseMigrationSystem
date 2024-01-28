@@ -2,22 +2,26 @@
 using System.Data;
 using System.Data.SqlClient;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
+using DatabaseMigrationSystem.Infrastructure.DbContext;
+using DatabaseMigrationSystem.Infrastructure.DbContext.Entities;
 
 namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.SqlServer;
 
 public class WriteDataSqlServerRepository : IWriteDataRepository
 {
     private readonly string _connectionString;
+    private readonly Func<ApplicationDbContext> _contextFactory;
 
-    public WriteDataSqlServerRepository(string connectionString)
+    public WriteDataSqlServerRepository(string connectionString, Func<ApplicationDbContext> contextFactory)
     {
         _connectionString = connectionString;
+        _contextFactory = contextFactory;
     }
 
-    public async Task WriteDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue)
+    public async Task WriteDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue, MigrationLog migrationLog,  CancellationToken cancellationToken)
     {
         await using var destinationConnection = new SqlConnection(_connectionString);
-        await destinationConnection.OpenAsync();
+        await destinationConnection.OpenAsync(cancellationToken);
 
         foreach (var dataBatch in dataQueue.GetConsumingEnumerable())
         {
@@ -59,6 +63,19 @@ public class WriteDataSqlServerRepository : IWriteDataRepository
             bulkCopy.DestinationTableName = $"{schema}.{table}";
 
             await bulkCopy.WriteToServerAsync(dataTable);
+            
+            migrationLog.DataCount = dataBatch.Count;
+            migrationLog.Date = DateTime.UtcNow;
+            await WriteLog(migrationLog);
         }
+    }
+    
+    private async Task WriteLog(MigrationLog log)
+    {
+        var context = _contextFactory();
+
+        context.MigrationLog.Add(log);
+
+        await context.SaveChangesAsync();
     }
 }

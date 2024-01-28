@@ -17,20 +17,33 @@ public class DataMigratorService : IDataMigratorService
     private readonly IWriteDataRepositoryFactory _writeDataRepositoryFactory;
     private readonly IWriteMigrationLogRepository _writeMigrationLogRepository;
     private readonly ICacheService _cacheService;
+    private readonly IGetDataInfoRepositoryFactory _getDataInfoRepositoryFactory;
 
 
-    public DataMigratorService(IReadDataRepositoryFactory readDataRepositoryFactory, IWriteDataRepositoryFactory writeDataRepositoryFactory, IWriteMigrationLogRepository writeMigrationLogRepository, ICacheService cacheService)
+    public DataMigratorService(
+        IReadDataRepositoryFactory readDataRepositoryFactory,
+        IWriteDataRepositoryFactory writeDataRepositoryFactory,
+        IWriteMigrationLogRepository writeMigrationLogRepository,
+        ICacheService cacheService,
+        IGetDataInfoRepositoryFactory getDataInfoRepository)
     {
         _readDataRepositoryFactory = readDataRepositoryFactory;
         _writeDataRepositoryFactory = writeDataRepositoryFactory;
         _writeMigrationLogRepository = writeMigrationLogRepository;
         _cacheService = cacheService;
+        _getDataInfoRepositoryFactory = getDataInfoRepository;
     }
 
     public async Task<bool> Handle(StartDataMigrate request, CancellationToken cancellationToken)
     {
         // Создание нового источника токена отмены
         var cts = new CancellationTokenSource();
+        var migrationId = Guid.NewGuid();
+
+        var dataInfoRepository = _getDataInfoRepositoryFactory.Create(request.SourceDatabaseType, request.SourceConnectionString);
+
+
+        var dataInfo = await dataInfoRepository.Get(cancellationToken);
 
         // Добавление источника токена отмены в словарь
         await _cacheService.SetAsync(request.UserId.ToString(), cts, TimeSpan.FromHours(1));
@@ -42,7 +55,9 @@ public class DataMigratorService : IDataMigratorService
             TableName = request.DestinationTable,
             Status = MigrationStatus.Start,
             Date = DateTime.UtcNow,
-            UserId = request.UserId
+            UserId = request.UserId,
+            ImportSessionId = migrationId,
+            DataCount = dataInfo.FirstOrDefault(x => x.CollectionName == request.SourceTable)?.DocumentCount ?? 0
         }, cancellationToken);
 
         var readRepository = _readDataRepositoryFactory.Create(request.SourceDatabaseType, request.SourceConnectionString);
@@ -51,19 +66,21 @@ public class DataMigratorService : IDataMigratorService
          var readTask = readRepository.ReadDataAsync(request.SourceSchema, request.SourceTable, dataQueue);
          var writeTask = Task.Run( () =>
          {
-              _writeMigrationLogRepository.Mutate(new MigrationLog
+             var log = new MigrationLog
              {
                  Schema = request.DestinationSchema,
                  TableName = request.DestinationTable,
                  Status = MigrationStatus.Processed,
                  Date = DateTime.UtcNow,
-                 UserId = request.UserId
-             }, cts.Token).FireAndForget();
+                 UserId = request.UserId,
+                 ImportSessionId = migrationId,
+             };
              RetryHelper.Do(
-                 () => writeRepository.WriteDataAsync(request.DestinationSchema, request.DestinationTable, dataQueue).GetAwaiter().GetResult(),
+                 () => writeRepository.WriteDataAsync(request.DestinationSchema, request.DestinationTable, dataQueue, log, cancellationToken).GetAwaiter().GetResult(),
                  (ex, iteration) =>
                  {
-                     Console.WriteLine($"{ex.Message}");
+                     log.Exception = ex.Message;
+                     _writeMigrationLogRepository.Mutate(log, CancellationToken.None).FireAndForget();
                  },
                  2, TimeSpan.FromMilliseconds(10), 2);
              
@@ -79,7 +96,8 @@ public class DataMigratorService : IDataMigratorService
             TableName = request.DestinationTable,
             Status = MigrationStatus.Finish,
             Date = DateTime.UtcNow,
-            UserId = request.UserId
+            UserId = request.UserId,
+            ImportSessionId = migrationId,
         }, CancellationToken.None);
         return true;
     }
@@ -95,7 +113,7 @@ public class DataMigratorService : IDataMigratorService
                 DataCount = 0,
                 Status = MigrationStatus.Cancel,
                 Date = DateTime.UtcNow,
-                UserId = userId
+                UserId = userId,
             }, token.Token);
             
             // Отмена операции

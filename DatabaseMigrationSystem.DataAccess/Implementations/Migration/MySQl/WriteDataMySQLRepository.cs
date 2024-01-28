@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using Dapper;
 using DatabaseMigrationSystem.DataAccess.Interfaces.Migration;
+using DatabaseMigrationSystem.Infrastructure.DbContext;
+using DatabaseMigrationSystem.Infrastructure.DbContext.Entities;
 using MySqlConnector;
 
 namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.MySQl;
@@ -8,16 +10,18 @@ namespace DatabaseMigrationSystem.DataAccess.Implementations.Migration.MySQl;
 public class WriteDataMySQLRepository : IWriteDataRepository
 {
     private readonly string _connectionString;
+    private readonly Func<ApplicationDbContext> _contextFactory;
 
-    public WriteDataMySQLRepository(string connectionString)
+    public WriteDataMySQLRepository(string connectionString, Func<ApplicationDbContext> contextFactory)
     {
         _connectionString = connectionString;
+        _contextFactory = contextFactory;
     }
     
-    public async Task WriteDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue)
+    public async Task WriteDataAsync(string schema, string table, BlockingCollection<IList<dynamic>> dataQueue, MigrationLog migrationLog,  CancellationToken cancellationToken)
     {
         await using var destinationConnection = new MySqlConnection(_connectionString);
-        await destinationConnection.OpenAsync();
+        await destinationConnection.OpenAsync(cancellationToken);
 
         // Получаем информацию о столбцах таблицы
         var columns = await GetColumnsInfo(destinationConnection, schema, table);
@@ -38,7 +42,11 @@ public class WriteDataMySQLRepository : IWriteDataRepository
                 SourceStream = stream
             };
 
-            await bulkLoader.LoadAsync();
+            await bulkLoader.LoadAsync(cancellationToken);
+            
+            migrationLog.DataCount = dataBatch.Count;
+            migrationLog.Date = DateTime.UtcNow;
+            await WriteLog(migrationLog);
         }
     }
 
@@ -119,5 +127,15 @@ private Type GetClrType(string sqlType)
         }
 
         return stringValue;
+    }
+    
+    
+    private async Task WriteLog(MigrationLog log)
+    {
+        var context = _contextFactory();
+
+        context.MigrationLog.Add(log);
+
+        await context.SaveChangesAsync();
     }
 }

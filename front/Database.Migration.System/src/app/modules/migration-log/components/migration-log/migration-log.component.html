@@ -1,89 +1,31 @@
-﻿<!--<div>-->
-<!--  <div class="container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">-->
-<!--    <mat-form-field appearance="fill" id="filter">-->
-<!--      <mat-label>Фильтр</mat-label>-->
-<!--      <input matInput type="text" id="filterInput" name="filterInput" (input)="applyFilter($event)">-->
-<!--    </mat-form-field>-->
-<!--    &lt;!&ndash; Rest of your code &ndash;&gt;-->
-<!--  </div>-->
-
-
-
-<!--<mat-table [dataSource]="dataSource">-->
-
-<!--    &lt;!&ndash; ID Column &ndash;&gt;-->
-<!--    <ng-container matColumnDef="id">-->
-<!--      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Start Date Column &ndash;&gt;-->
-<!--    <ng-container matColumnDef="startDate">-->
-<!--      <mat-header-cell *matHeaderCellDef> Дата старта миграции </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let element"> {{element.startDate}} </mat-cell>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; End Date Column &ndash;&gt;-->
-<!--    <ng-container matColumnDef="endDate">-->
-<!--      <mat-header-cell *matHeaderCellDef> Дата завершения миграции </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let element"> {{element.endDate}} </mat-cell>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Source DB Column &ndash;&gt;-->
-<!--    <ng-container matColumnDef="sourceDatabase">-->
-<!--      <mat-header-cell *matHeaderCellDef> Исходная база данных </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let element"> {{element.sourceDatabase}} </mat-cell>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Remote DB Column &ndash;&gt;-->
-<!--    <ng-container matColumnDef="destinationDatabase">-->
-<!--      <mat-header-cell *matHeaderCellDef> Удаленная база данных </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let element"> {{element.destinationDatabase}} </mat-cell>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Tables List Column &ndash;&gt;-->
-<!--    <ng-container matColumnDef="tableList">-->
-<!--      <mat-header-cell *matHeaderCellDef> таблица </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let element"> {{element.tableList}} </mat-cell>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Total Execution Time Column &ndash;&gt;-->
-<!--    <ng-container matColumnDef="executionTime">-->
-<!--      <mat-header-cell *matHeaderCellDef> Общее время выполнения </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let element"> {{element.executionTime}} </mat-cell>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Migration Status Column &ndash;&gt;-->
-<!--    <ng-container matColumnDef="migrationStatus">-->
-<!--      <mat-header-cell *matHeaderCellDef> Статус миграции </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let element"> {{element.migrationStatus}} </mat-cell>-->
-<!--    </ng-container>-->
-
-<!--    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
-<!--    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>-->
-<!--  </mat-table>-->
-
-<!--  <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>-->
-<!--</div>-->
-<h2 >Журнал миграций</h2>
-<mat-card>
+﻿<h2 >Журнал миграций</h2>
+<mat-card class="page-with-paginator">
   <mat-card-content>
-    <div class="migration-progress-container">
-      <!-- Круговая шкала выполнения миграции -->
-      <div class="progress-spinner-container">
-        <mat-progress-spinner [mode]="currentProgress > 0 ? 'determinate' : 'indeterminate'" [value]="currentProgress" diameter="200"></mat-progress-spinner>
-        <div class="progress-percentage" *ngIf="currentProgress > 0">{{currentProgress}}%</div>
-      </div>
-      <div class="migration-info">
-        <p><strong>Всего записей:</strong> 1000</p>
-        <p><strong>Импортировано записей:</strong> 600</p>
-        <p><strong>Прошедшее время:</strong> 1 час 30 минут</p>
+    <div class="migration-container" *ngFor="let migration of pagedData">
+      <div class="migration-card">
+        <div class="card-content">
+          <div class="progress-spinner-container">
+            <mat-progress-spinner
+              mode="determinate"
+              [value]="migration?.migrationProgressPercentage || 0"
+              diameter="100">
+            </mat-progress-spinner>
+            <div class="progress-percentage">{{ migration?.migrationProgressPercentage || 0 }}%</div> <!-- Текст процента внутри спиннера -->
+          </div>
+          <div class="migration-info">
+            <p><strong>Статус:  </strong>{{ migration?.migrationStatus }}</p>
+            <p><strong>Всего записей:</strong> {{ migration?.totalRecordsForMigration }}</p>
+            <p><strong>Импортировано записей:</strong> {{ migration?.currentRecordsCount }}</p>
+            <p><strong>Прошедшее время:</strong> {{ migration?.migrationDuration }}</p>
+          </div>
+        </div>
+        <div class="migration-actions">
+          <button mat-button color="warn" [disabled]="!isMigrationRunning">Отменить миграцию</button>
+          <button (click)="downloadLog(migration?.migrationId)" mat-button>Скачать логи</button>
+
+        </div>
       </div>
     </div>
-    <div class="migration-actions">
-      <!-- Кнопки управления -->
-      <button mat-button color="warn" [disabled]="!isMigrationRunning">Отменить миграцию</button>
-      <button mat-button>Скачать логи</button>
-    </div>
+    <mat-paginator [length]="migrationData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
   </mat-card-content>
 </mat-card>
